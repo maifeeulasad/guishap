@@ -1,12 +1,10 @@
 %{
     #include <stdio.h>
-    #include <string>
-    #include <iostream>
-    #include <experimental/filesystem>
 
     #ifdef YYDEBUG
         yydebug = 1;
     #endif
+
     void yyerror (char const *s);
     int yywrap();
     int yylex(void);
@@ -62,19 +60,19 @@ SET_VALUE   : EQUALS NUMBER                                         {printf("...
 %%
 
 
-int main()
+int main(int argc, char **argv)
 {
-
-    namespace fs = std::experimental::filesystem;
-
-    std::string path = "./test";
-    for (const auto & entry : fs::directory_iterator(path)){
-        std::cout << entry.path() <<  std::endl;
-    }
-    /*
     char buffer[BUFSIZ];
+    if(argc == 2){
+        char* input = fgets(buffer, sizeof buffer, stdin);
+        if (buffer == NULL) 
+            return -1;
+        set_input(input);
+        yyparse();
+        printf("****************Parsing complete************\n");
+    }
     while(1) {
-        char* input = fgets(string, BUFSIZ, fp);
+        char* input = fgets(buffer, sizeof buffer, stdin);
         if (buffer == NULL) 
             break;
         set_input(input);
@@ -82,7 +80,6 @@ int main()
         printf("****************Parsing complete************\n");
     }
    return 0;
-   */
 }
 int yywrap()
 {

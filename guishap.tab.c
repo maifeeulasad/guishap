@@ -65,19 +65,17 @@
 #line 1 "guishap.y" /* yacc.c:339  */
 
     #include <stdio.h>
-    #include <string>
-    #include <iostream>
-    #include <experimental/filesystem>
 
     #ifdef YYDEBUG
         yydebug = 1;
     #endif
+
     void yyerror (char const *s);
     int yywrap();
     int yylex(void);
     void set_input(const char* input);
 
-#line 81 "guishap.tab.c" /* yacc.c:339  */
+#line 79 "guishap.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -136,11 +134,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 16 "guishap.y" /* yacc.c:355  */
+#line 14 "guishap.y" /* yacc.c:355  */
 
   char *token;
 
-#line 144 "guishap.tab.c" /* yacc.c:355  */
+#line 142 "guishap.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -157,7 +155,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 161 "guishap.tab.c" /* yacc.c:358  */
+#line 159 "guishap.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -456,8 +454,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    47,    47,    49,    50,    52,    53,    54,    57,    58,
-      59
+       0,    45,    45,    47,    48,    50,    51,    52,    55,    56,
+      57
 };
 #endif
 
@@ -1233,61 +1231,61 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 47 "guishap.y" /* yacc.c:1646  */
+#line 45 "guishap.y" /* yacc.c:1646  */
     {printf("guishap\n");}
-#line 1239 "guishap.tab.c" /* yacc.c:1646  */
+#line 1237 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 49 "guishap.y" /* yacc.c:1646  */
+#line 47 "guishap.y" /* yacc.c:1646  */
     {printf("statement---\n");}
-#line 1245 "guishap.tab.c" /* yacc.c:1646  */
+#line 1243 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 50 "guishap.y" /* yacc.c:1646  */
+#line 48 "guishap.y" /* yacc.c:1646  */
     {printf("statement---s\n");}
-#line 1251 "guishap.tab.c" /* yacc.c:1646  */
+#line 1249 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 52 "guishap.y" /* yacc.c:1646  */
+#line 50 "guishap.y" /* yacc.c:1646  */
     {printf("1\n");}
-#line 1257 "guishap.tab.c" /* yacc.c:1646  */
+#line 1255 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 53 "guishap.y" /* yacc.c:1646  */
+#line 51 "guishap.y" /* yacc.c:1646  */
     {printf("2\n");}
-#line 1263 "guishap.tab.c" /* yacc.c:1646  */
+#line 1261 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 54 "guishap.y" /* yacc.c:1646  */
+#line 52 "guishap.y" /* yacc.c:1646  */
     {printf("3\n");}
-#line 1269 "guishap.tab.c" /* yacc.c:1646  */
+#line 1267 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 57 "guishap.y" /* yacc.c:1646  */
+#line 55 "guishap.y" /* yacc.c:1646  */
     {printf("....1\n");}
-#line 1275 "guishap.tab.c" /* yacc.c:1646  */
+#line 1273 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 58 "guishap.y" /* yacc.c:1646  */
+#line 56 "guishap.y" /* yacc.c:1646  */
     {printf("....2\n");}
-#line 1281 "guishap.tab.c" /* yacc.c:1646  */
+#line 1279 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 59 "guishap.y" /* yacc.c:1646  */
+#line 57 "guishap.y" /* yacc.c:1646  */
     {printf("....3\n");}
-#line 1287 "guishap.tab.c" /* yacc.c:1646  */
+#line 1285 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1291 "guishap.tab.c" /* yacc.c:1646  */
+#line 1289 "guishap.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1515,24 +1513,23 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 62 "guishap.y" /* yacc.c:1906  */
+#line 60 "guishap.y" /* yacc.c:1906  */
 
 
 
-int main()
+int main(int argc, char **argv)
 {
-
-    namespace fs = std::experimental::filesystem;
-
-    std::string path = "./test";
-    for (const auto & entry : fs::directory_iterator(path)){
-        std::cout << entry.path() <<  std::endl;
-        //printf("%s",entry.path());
-    }
-    /*
     char buffer[BUFSIZ];
+    if(argc == 2){
+        char* input = fgets(buffer, sizeof buffer, stdin);
+        if (buffer == NULL) 
+            return -1;
+        set_input(input);
+        yyparse();
+        printf("****************Parsing complete************\n");
+    }
     while(1) {
-        char* input = fgets(string, BUFSIZ, fp);
+        char* input = fgets(buffer, sizeof buffer, stdin);
         if (buffer == NULL) 
             break;
         set_input(input);
@@ -1540,7 +1537,6 @@ int main()
         printf("****************Parsing complete************\n");
     }
    return 0;
-   */
 }
 int yywrap()
 {

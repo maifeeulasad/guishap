@@ -69,7 +69,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 16 "guishap.y" /* yacc.c:1909  */
+#line 14 "guishap.y" /* yacc.c:1909  */
 
   char *token;
 
