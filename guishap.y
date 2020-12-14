@@ -71,16 +71,18 @@ STATEMENT   : VAR_DEF EOL
 
 EXPRESSION  : MATH_EXPRESSION
             | STRING_EXPRESSION
+            | FUNCTION
+            | CALL_FUNCTION
             ;
 
 SET_VALUE   : EQUALS EXPRESSION
             ;
 
-STRING_OPERATION    : VARIABLE
+STRING_EXPRESSION   : VARIABLE
                     | STRING
                     | STRING O_PLUS STRING
                     | STRING O_MULTIPLY MATH_EXPRESSION
-                    | START_P STRING_OPERATION END_P
+                    | START_P STRING_EXPRESSION END_P
                     ;
 
 MATH_EXPRESSION : VARIABLE
@@ -102,6 +104,13 @@ PARAM_DEF   : VAR_DEF
             | VAR_DEF COMMA PARAM_DEF
             | VAR_DEF_C COMMA PARAM_DEF
             ;
+
+CALL_FUNCTION   : VARIABLE START_P END_P
+                | VARIABLE START_P PARAM_VALUES END_P
+                ;
+
+PARAM_VALUES    : EXPRESSION
+                | EXPRESSION COMMA PARAM_VALUES
 
 %%
 
