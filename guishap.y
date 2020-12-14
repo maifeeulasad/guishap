@@ -38,6 +38,7 @@
 %token  THEN
 
 %token <token> NUMBER
+%token <token> BN_NUMBER
 %token <token> STRING
 %token <token> VARIABLE
 
@@ -87,6 +88,7 @@ STRING_EXPRESSION   : VARIABLE
 
 MATH_EXPRESSION : VARIABLE
                 | NUMBER
+                | BN_NUMBER
                 | NUMBER OPERATOR MATH_EXPRESSION
                 | START_P MATH_EXPRESSION END_P
                 ;

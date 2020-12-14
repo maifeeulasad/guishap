@@ -8,9 +8,10 @@
 %option noyywrap
 				
 
+BN_DIGIT [০১২৩৪৫৬৭৮৯]
+
 %%
 
- 
 "ধ্রুবক"								{return KEYWORD_CONSTANT;}
 "সংখ্যা"|"স্ট্রিং"						{yylval.token = yytext;return KEYWORD;}
 
@@ -36,6 +37,7 @@
 ";"									{return EOL;}
 
 [[:digit:]]+(\.[[:digit:]]+)?		{yylval.token = yytext;return NUMBER;}
+{BN_DIGIT}+(\.{BN_DIGIT}+)?			{yylval.token = yytext;return BN_NUMBER;}
 \"(\$\{.*\}|\\.|[^\"\\])*\"			{yylval.token = yytext;return STRING;}
 
 [[:alpha:]][[:alnum:]]* 			{yylval.token = yytext;return VARIABLE;}
