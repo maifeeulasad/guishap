@@ -10,7 +10,34 @@
 
 %%
 
+ 
+"চলক"								{return KEYWORD_VARIABLE;}
+"ধ্রুবক"								{return KEYWORD_CONSTANT;}
+"সংখ্যা"|"স্ট্রিং"						{yylval.token = yytext;return KEYWORD;}
 
+"+"|"-"|"*"|"/" 					{yylval.token = yytext;return OPERATOR;}
+
+"ফিরান"		 						{return RETURN;}
+
+"যদি" 								{return IF;}
+"তাহলে" 								{return THEN;}
+
+[{]									{return START_C;}
+[}]									{return END_C;} 
+
+[(]									{return START_P;}
+[)]									{return END_P;}
+
+"="                     			{return EQUALS;}
+","                     			{return COMMA;}
+
+";"									{return EOL;}
+
+[[:digit:]]+(\.[[:digit:]]+)?		{yylval.token = yytext;return NUMBER;}
+\"(\$\{.*\}|\\.|[^\"\\])*\"			{yylval.token = yytext;return STRING;}
+
+[[:alpha:]][[:alnum:]]* 			{yylval.token = yytext;return VARIABLE;}
+[[:space:]\t\n]+            		;
 .                       			{return *yytext;}
 
 

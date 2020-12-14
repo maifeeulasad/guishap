@@ -13,11 +13,41 @@
   char *token;
 }
 
+%token <token>  KEYWORD
+%token  KEYWORD_CONSTANT
+%token  KEYWORD_VARIABLE
 
+%token <token> OPERATOR
+
+%token  RETURN
+
+%token  START_P
+%token  END_P
+%token  START_C
+%token  END_C
+
+
+%token  EQUALS
+%token  COMMA
+
+%token  IF
+%token  THEN
+
+%token <token> NUMBER
+%token <token> STRING
+%token <token> VARIABLE
+
+%token EOL
 
 
 %%
-
+GUISHAP     : STATEMENTS                {printf("guishap\n");}
+            ;
+STATEMENTS  : STATEMENT                 {printf("statement---\n");}
+            | STATEMENT STATEMENTS      {printf("statement---s\n");}
+            ;
+STATEMENT   : EOL      {printf(";;;;;;\n");}
+            ;
 
 %%
 
