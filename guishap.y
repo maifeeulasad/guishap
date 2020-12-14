@@ -15,7 +15,6 @@
 
 %token <token>  KEYWORD
 %token  KEYWORD_CONSTANT
-%token  KEYWORD_VARIABLE
 
 %token <token> OPERATOR
 
@@ -41,12 +40,19 @@
 
 
 %%
-GUISHAP     : STATEMENTS                {printf("guishap\n");}
+GUISHAP     : STATEMENTS                            {printf("guishap\n");}
             ;
-STATEMENTS  : STATEMENT                 {printf("statement---\n");}
-            | STATEMENT STATEMENTS      {printf("statement---s\n");}
+STATEMENTS  : STATEMENT                             {printf("statement---\n");}
+            | STATEMENT STATEMENTS                  {printf("statement---s\n");}
             ;
-STATEMENT   : EOL      {printf(";;;;;;\n");}
+STATEMENT   : KEYWORD_CONSTANT KEYWORD VARIABLE EOL {printf("1\n");}
+            | KEYWORD VARIABLE EOL                  {printf("2\n");}
+            | KEYWORD VARIABLE SET_VALUE EOL        {printf("3\n");}
+            ;
+
+SET_VALUE   : EQUALS NUMBER
+            | EQUALS STRING
+            | EQUALS VARIABLE
             ;
 
 %%

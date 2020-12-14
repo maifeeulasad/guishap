@@ -11,7 +11,6 @@
 %%
 
  
-"চলক"								{return KEYWORD_VARIABLE;}
 "ধ্রুবক"								{return KEYWORD_CONSTANT;}
 "সংখ্যা"|"স্ট্রিং"						{yylval.token = yytext;return KEYWORD;}
 
