@@ -17,3 +17,11 @@
 	ধ্রুবক সংখ্যা x = y;
 	ধ্রুবক স্ট্রিং x = y;
 	```
+ - Mathematical Operations :
+  ```
+  todo : add code, 4 operations in different rules
+  ```
+ - String Operations :
+  ```
+  todo : add code, 2 operations in different rules
+  ```
