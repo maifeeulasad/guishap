@@ -52,10 +52,17 @@ STATEMENT   : KEYWORD_CONSTANT KEYWORD VARIABLE SET_VALUE EOL       {printf("1\n
             | KEYWORD VARIABLE SET_VALUE EOL                        {printf("3\n");}
             ;
 
-SET_VALUE   : EQUALS NUMBER                                         {printf("....1\n");}
+SET_VALUE   : EQUALS MATH_EXPRESSION                                {printf("....1\n");}
             | EQUALS STRING                                         {printf("....2\n");}
             | EQUALS VARIABLE                                       {printf("....3\n");}
             ;
+
+MATH_EXPRESSION : NUMBER
+                | VARIABLE
+                | NUMBER OPERATOR MATH_EXPRESSION
+                | START_P MATH_EXPRESSION END_P
+                ;
+
 
 %%
 
