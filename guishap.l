@@ -14,7 +14,10 @@
 "ধ্রুবক"								{return KEYWORD_CONSTANT;}
 "সংখ্যা"|"স্ট্রিং"						{yylval.token = yytext;return KEYWORD;}
 
-"+"|"-"|"*"|"/" 					{yylval.token = yytext;return OPERATOR;}
+"+" 					{yylval.token = yytext;return O_PLUS;}
+"-" 					{yylval.token = yytext;return O_MINUS;}
+"/" 					{yylval.token = yytext;return O_DEVIDE;}
+"*" 					{yylval.token = yytext;return O_MULTIPLY;}
 
 "ফিরান"		 						{return RETURN;}
 

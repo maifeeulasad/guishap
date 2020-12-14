@@ -18,7 +18,10 @@
 %token <token>  KEYWORD
 %token  KEYWORD_CONSTANT
 
-%token <token> OPERATOR
+%token O_PLUS
+%token O_MINUS
+%token O_DEVIDE
+%token O_MULTIPLY
 
 %token  RETURN
 
@@ -44,6 +47,13 @@
 %%
 GUISHAP     : STATEMENTS                                            {printf("guishap\n");}
             ;
+
+OPERATOR    : O_PLUS
+            | O_MINUS
+            | O_DEVIDE
+            | O_MULTIPLY
+            ;
+
 STATEMENTS  : STATEMENT                                             {printf("statement---\n");}
             | STATEMENT STATEMENTS                                  {printf("statement---s\n");}
             ;
@@ -52,13 +62,19 @@ STATEMENT   : KEYWORD_CONSTANT KEYWORD VARIABLE SET_VALUE EOL       {printf("1\n
             | KEYWORD VARIABLE SET_VALUE EOL                        {printf("3\n");}
             ;
 
-SET_VALUE   : EQUALS VARIABLE
-            | EQUALS MATH_EXPRESSION
-            | EQUALS STRING
+SET_VALUE   : EQUALS MATH_EXPRESSION
+            | EQUALS STRING_OPERATION
             ;
 
-MATH_EXPRESSION : NUMBER
-                | VARIABLE
+STRING_OPERATION    : VARIABLE
+                    | STRING
+                    | STRING O_PLUS STRING
+                    | STRING O_MULTIPLY MATH_EXPRESSION
+                    | START_P STRING_OPERATION END_P
+                    ;
+
+MATH_EXPRESSION : VARIABLE
+                | NUMBER
                 | NUMBER OPERATOR MATH_EXPRESSION
                 | START_P MATH_EXPRESSION END_P
                 ;
