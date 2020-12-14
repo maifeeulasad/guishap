@@ -47,21 +47,20 @@ extern int yydebug;
   {
     KEYWORD = 258,
     KEYWORD_CONSTANT = 259,
-    KEYWORD_VARIABLE = 260,
-    OPERATOR = 261,
-    RETURN = 262,
-    START_P = 263,
-    END_P = 264,
-    START_C = 265,
-    END_C = 266,
-    EQUALS = 267,
-    COMMA = 268,
-    IF = 269,
-    THEN = 270,
-    NUMBER = 271,
-    STRING = 272,
-    VARIABLE = 273,
-    EOL = 274
+    OPERATOR = 260,
+    RETURN = 261,
+    START_P = 262,
+    END_P = 263,
+    START_C = 264,
+    END_C = 265,
+    EQUALS = 266,
+    COMMA = 267,
+    IF = 268,
+    THEN = 269,
+    NUMBER = 270,
+    STRING = 271,
+    VARIABLE = 272,
+    EOL = 273
   };
 #endif
 
@@ -70,11 +69,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 12 "guishap.y" /* yacc.c:1909  */
+#line 16 "guishap.y" /* yacc.c:1909  */
 
   char *token;
 
-#line 78 "guishap.tab.h" /* yacc.c:1909  */
+#line 77 "guishap.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

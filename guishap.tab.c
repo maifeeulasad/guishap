@@ -64,7 +64,11 @@
 /* Copy the first part of user declarations.  */
 #line 1 "guishap.y" /* yacc.c:339  */
 
-    #include<stdio.h>
+    #include <stdio.h>
+    #include <string>
+    #include <iostream>
+    #include <experimental/filesystem>
+
     #ifdef YYDEBUG
         yydebug = 1;
     #endif
@@ -73,7 +77,7 @@
     int yylex(void);
     void set_input(const char* input);
 
-#line 77 "guishap.tab.c" /* yacc.c:339  */
+#line 81 "guishap.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -110,21 +114,20 @@ extern int yydebug;
   {
     KEYWORD = 258,
     KEYWORD_CONSTANT = 259,
-    KEYWORD_VARIABLE = 260,
-    OPERATOR = 261,
-    RETURN = 262,
-    START_P = 263,
-    END_P = 264,
-    START_C = 265,
-    END_C = 266,
-    EQUALS = 267,
-    COMMA = 268,
-    IF = 269,
-    THEN = 270,
-    NUMBER = 271,
-    STRING = 272,
-    VARIABLE = 273,
-    EOL = 274
+    OPERATOR = 260,
+    RETURN = 261,
+    START_P = 262,
+    END_P = 263,
+    START_C = 264,
+    END_C = 265,
+    EQUALS = 266,
+    COMMA = 267,
+    IF = 268,
+    THEN = 269,
+    NUMBER = 270,
+    STRING = 271,
+    VARIABLE = 272,
+    EOL = 273
   };
 #endif
 
@@ -133,11 +136,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 12 "guishap.y" /* yacc.c:355  */
+#line 16 "guishap.y" /* yacc.c:355  */
 
   char *token;
 
-#line 141 "guishap.tab.c" /* yacc.c:355  */
+#line 144 "guishap.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -154,7 +157,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 158 "guishap.tab.c" /* yacc.c:358  */
+#line 161 "guishap.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -394,23 +397,23 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  5
+#define YYFINAL  8
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   2
+#define YYLAST   17
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  20
+#define YYNTOKENS  19
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  4
+#define YYNNTS  5
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  5
+#define YYNRULES  10
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  7
+#define YYNSTATES  20
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   274
+#define YYMAXUTOK   273
 
 #define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -446,14 +449,15 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19
+      15,    16,    17,    18
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    44,    44,    46,    47,    49
+       0,    47,    47,    49,    50,    52,    53,    54,    57,    58,
+      59
 };
 #endif
 
@@ -463,9 +467,9 @@ static const yytype_uint8 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "KEYWORD", "KEYWORD_CONSTANT",
-  "KEYWORD_VARIABLE", "OPERATOR", "RETURN", "START_P", "END_P", "START_C",
-  "END_C", "EQUALS", "COMMA", "IF", "THEN", "NUMBER", "STRING", "VARIABLE",
-  "EOL", "$accept", "GUISHAP", "STATEMENTS", "STATEMENT", YY_NULLPTR
+  "OPERATOR", "RETURN", "START_P", "END_P", "START_C", "END_C", "EQUALS",
+  "COMMA", "IF", "THEN", "NUMBER", "STRING", "VARIABLE", "EOL", "$accept",
+  "GUISHAP", "STATEMENTS", "STATEMENT", "SET_VALUE", YY_NULLPTR
 };
 #endif
 
@@ -475,14 +479,14 @@ static const char *const yytname[] =
 static const yytype_uint16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266,   267,   268,   269,   270,   271,   272,   273,   274
+     265,   266,   267,   268,   269,   270,   271,   272,   273
 };
 # endif
 
-#define YYPACT_NINF -20
+#define YYPACT_NINF -15
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-20)))
+  (!!((Yystate) == (-15)))
 
 #define YYTABLE_NINF -1
 
@@ -493,7 +497,8 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -19,   -20,     1,   -20,   -19,   -20,   -20
+       1,    -9,     3,     9,   -15,     1,   -11,    -7,   -15,   -15,
+     -14,   -15,    -6,     0,   -15,   -15,   -15,   -15,    -5,   -15
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -501,19 +506,20 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     5,     0,     2,     3,     1,     4
+       0,     0,     0,     0,     2,     3,     0,     0,     1,     4,
+       0,     6,     0,     0,     8,     9,    10,     7,     0,     5
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -20,   -20,    -2,   -20
+     -15,   -15,    10,   -15,     4
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     3,     4
+      -1,     3,     4,     5,    12
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -521,31 +527,36 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       1,     5,     6
+      10,    14,    15,    16,     1,     2,     7,    11,     6,     8,
+      13,    10,    17,    19,     0,     9,     0,    18
 };
 
-static const yytype_uint8 yycheck[] =
+static const yytype_int8 yycheck[] =
 {
-      19,     0,     4
+      11,    15,    16,    17,     3,     4,     3,    18,    17,     0,
+      17,    11,    18,    18,    -1,     5,    -1,    13
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    19,    21,    22,    23,     0,    22
+       0,     3,     4,    20,    21,    22,    17,     3,     0,    21,
+      11,    18,    23,    17,    15,    16,    17,    18,    23,    18
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    20,    21,    22,    22,    23
+       0,    19,    20,    21,    21,    22,    22,    22,    23,    23,
+      23
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     1,     1,     2,     1
+       0,     2,     1,     1,     2,     5,     3,     4,     2,     2,
+       2
 };
 
 
@@ -1222,31 +1233,61 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 44 "guishap.y" /* yacc.c:1646  */
+#line 47 "guishap.y" /* yacc.c:1646  */
     {printf("guishap\n");}
-#line 1228 "guishap.tab.c" /* yacc.c:1646  */
+#line 1239 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 46 "guishap.y" /* yacc.c:1646  */
+#line 49 "guishap.y" /* yacc.c:1646  */
     {printf("statement---\n");}
-#line 1234 "guishap.tab.c" /* yacc.c:1646  */
+#line 1245 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 47 "guishap.y" /* yacc.c:1646  */
+#line 50 "guishap.y" /* yacc.c:1646  */
     {printf("statement---s\n");}
-#line 1240 "guishap.tab.c" /* yacc.c:1646  */
+#line 1251 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 49 "guishap.y" /* yacc.c:1646  */
-    {printf(";;;;;;\n");}
-#line 1246 "guishap.tab.c" /* yacc.c:1646  */
+#line 52 "guishap.y" /* yacc.c:1646  */
+    {printf("1\n");}
+#line 1257 "guishap.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 6:
+#line 53 "guishap.y" /* yacc.c:1646  */
+    {printf("2\n");}
+#line 1263 "guishap.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 7:
+#line 54 "guishap.y" /* yacc.c:1646  */
+    {printf("3\n");}
+#line 1269 "guishap.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 8:
+#line 57 "guishap.y" /* yacc.c:1646  */
+    {printf("....1\n");}
+#line 1275 "guishap.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 9:
+#line 58 "guishap.y" /* yacc.c:1646  */
+    {printf("....2\n");}
+#line 1281 "guishap.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 10:
+#line 59 "guishap.y" /* yacc.c:1646  */
+    {printf("....3\n");}
+#line 1287 "guishap.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1250 "guishap.tab.c" /* yacc.c:1646  */
+#line 1291 "guishap.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1474,16 +1515,24 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 52 "guishap.y" /* yacc.c:1906  */
+#line 62 "guishap.y" /* yacc.c:1906  */
 
 
 
 int main()
 {
+
+    namespace fs = std::experimental::filesystem;
+
+    std::string path = "./test";
+    for (const auto & entry : fs::directory_iterator(path)){
+        std::cout << entry.path() <<  std::endl;
+        //printf("%s",entry.path());
+    }
+    /*
     char buffer[BUFSIZ];
-    while (1)
-    {
-        char* input = fgets(buffer, sizeof buffer, stdin);
+    while(1) {
+        char* input = fgets(string, BUFSIZ, fp);
         if (buffer == NULL) 
             break;
         set_input(input);
@@ -1491,6 +1540,7 @@ int main()
         printf("****************Parsing complete************\n");
     }
    return 0;
+   */
 }
 int yywrap()
 {
