@@ -63,7 +63,7 @@ extern int yydebug;
     NUMBER = 273,
     BN_NUMBER = 274,
     STRING = 275,
-    VARIABLE = 276,
+    EN_VARIABLE = 276,
     BN_VARIABLE = 277,
     EOL = 278
   };

@@ -42,7 +42,7 @@ BN_CHAR_DIGIT 		[০১২৩৪৫৬৭৮৯অআইঈউঊঋএঐওঔ
 {BN_DIGIT}+(\.{BN_DIGIT}+)?			{yylval.token = yytext;return BN_NUMBER;}
 \"(\$\{.*\}|\\.|[^\"\\])*\"			{yylval.token = yytext;return STRING;}
 
-[[:alpha:]][[:alnum:]]* 			{yylval.token = yytext;return VARIABLE;}
+[[:alpha:]][[:alnum:]]* 			{yylval.token = yytext;return EN_VARIABLE;}
 {BN_CHAR}{BN_CHAR_DIGIT}* 			{yylval.token = yytext;return BN_VARIABLE;}
 [[:space:]\t\n]+            		;
 .                       			{return *yytext;}

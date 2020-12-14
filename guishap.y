@@ -40,7 +40,7 @@
 %token <token> NUMBER
 %token <token> BN_NUMBER
 %token <token> STRING
-%token <token> VARIABLE
+%token <token> EN_VARIABLE
 %token <token> BN_VARIABLE
 
 %token EOL
@@ -50,6 +50,9 @@
 GUISHAP     : STATEMENTS                                            {printf("guishap\n");}
             ;
 
+VARIABLE    : BN_VARIABLE
+            | EN_VARIABLE
+
 OPERATOR    : O_PLUS
             | O_MINUS
             | O_DEVIDE
@@ -58,12 +61,9 @@ OPERATOR    : O_PLUS
 
 VAR_DEF     : KEYWORD VARIABLE
             | KEYWORD VARIABLE SET_VALUE
-            | KEYWORD BN_VARIABLE
-            | KEYWORD BN_VARIABLE SET_VALUE
             ;
 
 VAR_DEF_C   : KEYWORD_CONSTANT KEYWORD VARIABLE SET_VALUE
-            | KEYWORD_CONSTANT KEYWORD BN_VARIABLE SET_VALUE
             ;
 
 STATEMENTS  : STATEMENT
@@ -84,7 +84,6 @@ SET_VALUE   : EQUALS EXPRESSION
             ;
 
 STRING_EXPRESSION   : VARIABLE
-                    | BN_VARIABLE
                     | STRING
                     | STRING O_PLUS STRING
                     | STRING O_MULTIPLY MATH_EXPRESSION
@@ -92,7 +91,6 @@ STRING_EXPRESSION   : VARIABLE
                     ;
 
 MATH_EXPRESSION : VARIABLE
-                | BN_VARIABLE
                 | NUMBER
                 | BN_NUMBER
                 | NUMBER OPERATOR MATH_EXPRESSION
@@ -105,7 +103,6 @@ CODEBLOCK   : START_C END_C
             ;
 
 FUNCTION    : VARIABLE START_P PARAM_DEF END_P CODEBLOCK
-            | BN_VARIABLE START_P PARAM_DEF END_P CODEBLOCK
             ;
 
 PARAM_DEF   : VAR_DEF
@@ -116,8 +113,6 @@ PARAM_DEF   : VAR_DEF
 
 CALL_FUNCTION   : VARIABLE START_P END_P
                 | VARIABLE START_P PARAM_VALUES END_P
-                | BN_VARIABLE START_P END_P
-                | BN_VARIABLE START_P PARAM_VALUES END_P
                 ;
 
 PARAM_VALUES    : EXPRESSION

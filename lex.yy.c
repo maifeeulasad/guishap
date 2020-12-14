@@ -957,7 +957,7 @@ YY_RULE_SETUP
 case 20:
 YY_RULE_SETUP
 #line 45 "guishap.l"
-{yylval.token = yytext;return VARIABLE;}
+{yylval.token = yytext;return EN_VARIABLE;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
