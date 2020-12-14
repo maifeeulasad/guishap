@@ -64,7 +64,8 @@ extern int yydebug;
     BN_NUMBER = 274,
     STRING = 275,
     VARIABLE = 276,
-    EOL = 277
+    BN_VARIABLE = 277,
+    EOL = 278
   };
 #endif
 
@@ -77,7 +78,7 @@ union YYSTYPE
 
   char *token;
 
-#line 81 "guishap.tab.h" /* yacc.c:1909  */
+#line 82 "guishap.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

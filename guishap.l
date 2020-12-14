@@ -8,17 +8,19 @@
 %option noyywrap
 				
 
-BN_DIGIT [০১২৩৪৫৬৭৮৯]
+BN_DIGIT 			[০১২৩৪৫৬৭৮৯]
+BN_CHAR 			[অআইঈউঊঋএঐওঔকখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহড়ঢ়য়ৎংঃঁ]
+BN_CHAR_DIGIT 		[০১২৩৪৫৬৭৮৯অআইঈউঊঋএঐওঔকখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহড়ঢ়য়ৎংঃঁ]
 
 %%
 
 "ধ্রুবক"								{return KEYWORD_CONSTANT;}
-"সংখ্যা"|"স্ট্রিং"						{yylval.token = yytext;return KEYWORD;}
+"সংখ্যা"|"স্ট্রিং"					{yylval.token = yytext;return KEYWORD;}
 
-"+" 					{yylval.token = yytext;return O_PLUS;}
-"-" 					{yylval.token = yytext;return O_MINUS;}
-"/" 					{yylval.token = yytext;return O_DEVIDE;}
-"*" 					{yylval.token = yytext;return O_MULTIPLY;}
+"+" 								{yylval.token = yytext;return O_PLUS;}
+"-" 								{yylval.token = yytext;return O_MINUS;}
+"/" 								{yylval.token = yytext;return O_DEVIDE;}
+"*" 								{yylval.token = yytext;return O_MULTIPLY;}
 
 "ফিরান"		 						{return RETURN;}
 
@@ -41,6 +43,7 @@ BN_DIGIT [০১২৩৪৫৬৭৮৯]
 \"(\$\{.*\}|\\.|[^\"\\])*\"			{yylval.token = yytext;return STRING;}
 
 [[:alpha:]][[:alnum:]]* 			{yylval.token = yytext;return VARIABLE;}
+{BN_CHAR}{BN_CHAR_DIGIT}* 			{yylval.token = yytext;return BN_VARIABLE;}
 [[:space:]\t\n]+            		;
 .                       			{return *yytext;}
 
