@@ -118,14 +118,6 @@ PARAM_VALUES    : EXPRESSION
 int main(int argc, char **argv)
 {
     char buffer[BUFSIZ];
-    if(argc == 2 || argc == 3){
-        char* input = fgets(buffer, sizeof buffer, stdin);
-        if (buffer == NULL) 
-            return -1;
-        set_input(input);
-        yyparse();
-        printf("****************Parsing complete************\n");
-    }
     while(1) {
         char* input = fgets(buffer, sizeof buffer, stdin);
         if (buffer == NULL) 
