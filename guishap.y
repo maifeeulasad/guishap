@@ -47,41 +47,43 @@
 
 
 %%
-GUISHAP     : STATEMENTS                                            {printf("guishap\n");}
-            ;
+GUISHAP             : STATEMENTS                                            {printf("guishap\n");}
+                    ;
 
-VARIABLE    : BN_VARIABLE
-            | EN_VARIABLE
+VARIABLE            : BN_VARIABLE
+                    | EN_VARIABLE
+                    ;
 
-OPERATOR    : O_PLUS
-            | O_MINUS
-            | O_DEVIDE
-            | O_MULTIPLY
-            ;
+OPERATOR            : O_PLUS
+                    | O_MINUS
+                    | O_DEVIDE
+                    | O_MULTIPLY
+                    ;
 
-VAR_DEF     : KEYWORD VARIABLE
-            | KEYWORD VARIABLE SET_VALUE
-            ;
+VAR_DEF             : KEYWORD VARIABLE
+                    | KEYWORD VARIABLE SET_VALUE
+                    ;
 
-VAR_DEF_C   : KEYWORD_CONSTANT KEYWORD VARIABLE SET_VALUE
-            ;
+VAR_DEF_C           : KEYWORD_CONSTANT KEYWORD VARIABLE SET_VALUE
+                    ;
 
-STATEMENTS  : STATEMENT
-            | STATEMENT STATEMENTS
-            ;
-STATEMENT   : VAR_DEF EOL
-            | VAR_DEF_C EOL
-            | CODEBLOCK
-            ;
+STATEMENTS          : STATEMENT
+                    | STATEMENT STATEMENTS
+                    ;
 
-EXPRESSION  : MATH_EXPRESSION
-            | STRING_EXPRESSION
-            | FUNCTION
-            | CALL_FUNCTION
-            ;
+STATEMENT           : VAR_DEF EOL
+                    | VAR_DEF_C EOL
+                    | CODEBLOCK
+                    ;
 
-SET_VALUE   : EQUALS EXPRESSION
-            ;
+EXPRESSION          : MATH_EXPRESSION
+                    | STRING_EXPRESSION
+                    | FUNCTION
+                    | CALL_FUNCTION
+                    ;
+
+SET_VALUE           : EQUALS EXPRESSION
+                    ;
 
 STRING_EXPRESSION   : VARIABLE
                     | STRING
@@ -90,33 +92,34 @@ STRING_EXPRESSION   : VARIABLE
                     | START_P STRING_EXPRESSION END_P
                     ;
 
-MATH_EXPRESSION : VARIABLE
-                | NUMBER
-                | BN_NUMBER
-                | NUMBER OPERATOR MATH_EXPRESSION
-                | START_P MATH_EXPRESSION END_P
-                ;
+MATH_EXPRESSION     : VARIABLE
+                    | NUMBER
+                    | BN_NUMBER
+                    | NUMBER OPERATOR MATH_EXPRESSION
+                    | START_P MATH_EXPRESSION END_P
+                    ;
 
-CODEBLOCK   : START_C END_C
-            | START_C STATEMENTS END_C
-            | START_C STATEMENTS RETURN EXPRESSION EOL END_C
-            ;
+CODEBLOCK           : START_C END_C
+                    | START_C STATEMENTS END_C
+                    | START_C STATEMENTS RETURN EXPRESSION EOL END_C
+                    ;
 
-FUNCTION    : VARIABLE START_P PARAM_DEF END_P CODEBLOCK
-            ;
+FUNCTION            : VARIABLE START_P PARAM_DEF END_P CODEBLOCK
+                    ;
 
-PARAM_DEF   : VAR_DEF
-            | VAR_DEF_C
-            | VAR_DEF COMMA PARAM_DEF
-            | VAR_DEF_C COMMA PARAM_DEF
-            ;
+PARAM_DEF           : VAR_DEF
+                    | VAR_DEF_C
+                    | VAR_DEF COMMA PARAM_DEF
+                    | VAR_DEF_C COMMA PARAM_DEF
+                    ;
 
-CALL_FUNCTION   : VARIABLE START_P END_P
-                | VARIABLE START_P PARAM_VALUES END_P
-                ;
+CALL_FUNCTION       : VARIABLE START_P END_P
+                    | VARIABLE START_P PARAM_VALUES END_P
+                    ;
 
-PARAM_VALUES    : EXPRESSION
-                | EXPRESSION COMMA PARAM_VALUES
+PARAM_VALUES        : EXPRESSION
+                    | EXPRESSION COMMA PARAM_VALUES
+                    ;
 
 %%
 
