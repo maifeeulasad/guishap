@@ -40,19 +40,19 @@
 
 
 %%
-GUISHAP     : STATEMENTS                            {printf("guishap\n");}
+GUISHAP     : STATEMENTS                                            {printf("guishap\n");}
             ;
-STATEMENTS  : STATEMENT                             {printf("statement---\n");}
-            | STATEMENT STATEMENTS                  {printf("statement---s\n");}
+STATEMENTS  : STATEMENT                                             {printf("statement---\n");}
+            | STATEMENT STATEMENTS                                  {printf("statement---s\n");}
             ;
-STATEMENT   : KEYWORD_CONSTANT KEYWORD VARIABLE EOL {printf("1\n");}
-            | KEYWORD VARIABLE EOL                  {printf("2\n");}
-            | KEYWORD VARIABLE SET_VALUE EOL        {printf("3\n");}
+STATEMENT   : KEYWORD_CONSTANT KEYWORD VARIABLE SET_VALUE EOL       {printf("1\n");}
+            | KEYWORD VARIABLE EOL                                  {printf("2\n");}
+            | KEYWORD VARIABLE SET_VALUE EOL                        {printf("3\n");}
             ;
 
-SET_VALUE   : EQUALS NUMBER
-            | EQUALS STRING
-            | EQUALS VARIABLE
+SET_VALUE   : EQUALS NUMBER                                         {printf("....1\n");}
+            | EQUALS STRING                                         {printf("....2\n");}
+            | EQUALS VARIABLE                                       {printf("....3\n");}
             ;
 
 %%
