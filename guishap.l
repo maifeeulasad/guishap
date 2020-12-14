@@ -8,8 +8,7 @@
 %option noyywrap
 				
 
-BN_DIGIT    [\x09e6-\x09ef]
-BN_DIGIT_EX [০১২৩৪৫৬৭৮৯]
+BN_DIGIT [০১২৩৪৫৬৭৮৯]
 
 %%
 
@@ -38,7 +37,7 @@ BN_DIGIT_EX [০১২৩৪৫৬৭৮৯]
 ";"									{return EOL;}
 
 [[:digit:]]+(\.[[:digit:]]+)?		{yylval.token = yytext;return NUMBER;}
-{BN_DIGIT_EX}+(\.{BN_DIGIT_EX}+)?			{yylval.token = yytext;return BN_NUMBER;}
+{BN_DIGIT}+(\.{BN_DIGIT}+)?			{yylval.token = yytext;return BN_NUMBER;}
 \"(\$\{.*\}|\\.|[^\"\\])*\"			{yylval.token = yytext;return STRING;}
 
 [[:alpha:]][[:alnum:]]* 			{yylval.token = yytext;return VARIABLE;}

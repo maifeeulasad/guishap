@@ -784,7 +784,7 @@ YY_DECL
 		}
 
 	{
-#line 14 "guishap.l"
+#line 13 "guishap.l"
 
 
 #line 791 "lex.yy.c"
@@ -856,119 +856,119 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 16 "guishap.l"
+#line 15 "guishap.l"
 {return KEYWORD_CONSTANT;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 17 "guishap.l"
+#line 16 "guishap.l"
 {yylval.token = yytext;return KEYWORD;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 19 "guishap.l"
+#line 18 "guishap.l"
 {yylval.token = yytext;return O_PLUS;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 20 "guishap.l"
+#line 19 "guishap.l"
 {yylval.token = yytext;return O_MINUS;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 21 "guishap.l"
+#line 20 "guishap.l"
 {yylval.token = yytext;return O_DEVIDE;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 22 "guishap.l"
+#line 21 "guishap.l"
 {yylval.token = yytext;return O_MULTIPLY;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 24 "guishap.l"
+#line 23 "guishap.l"
 {return RETURN;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 26 "guishap.l"
+#line 25 "guishap.l"
 {return IF;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 27 "guishap.l"
+#line 26 "guishap.l"
 {return THEN;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 29 "guishap.l"
+#line 28 "guishap.l"
 {return START_C;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 30 "guishap.l"
+#line 29 "guishap.l"
 {return END_C;} 
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 32 "guishap.l"
+#line 31 "guishap.l"
 {return START_P;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 33 "guishap.l"
+#line 32 "guishap.l"
 {return END_P;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 35 "guishap.l"
+#line 34 "guishap.l"
 {return EQUALS;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 36 "guishap.l"
+#line 35 "guishap.l"
 {return COMMA;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 38 "guishap.l"
+#line 37 "guishap.l"
 {return EOL;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 40 "guishap.l"
+#line 39 "guishap.l"
 {yylval.token = yytext;return NUMBER;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 41 "guishap.l"
+#line 40 "guishap.l"
 {yylval.token = yytext;return BN_NUMBER;}
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 42 "guishap.l"
+#line 41 "guishap.l"
 {yylval.token = yytext;return STRING;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 44 "guishap.l"
+#line 43 "guishap.l"
 {yylval.token = yytext;return VARIABLE;}
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 45 "guishap.l"
+#line 44 "guishap.l"
 ;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 46 "guishap.l"
+#line 45 "guishap.l"
 {return *yytext;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 49 "guishap.l"
+#line 48 "guishap.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
 #line 975 "lex.yy.c"
@@ -1947,7 +1947,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 49 "guishap.l"
+#line 48 "guishap.l"
 
 
 static YY_BUFFER_STATE flex_buffer;
