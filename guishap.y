@@ -52,9 +52,9 @@ STATEMENT   : KEYWORD_CONSTANT KEYWORD VARIABLE SET_VALUE EOL       {printf("1\n
             | KEYWORD VARIABLE SET_VALUE EOL                        {printf("3\n");}
             ;
 
-SET_VALUE   : EQUALS MATH_EXPRESSION                                {printf("....1\n");}
-            | EQUALS STRING                                         {printf("....2\n");}
-            | EQUALS VARIABLE                                       {printf("....3\n");}
+SET_VALUE   : EQUALS VARIABLE
+            | EQUALS MATH_EXPRESSION
+            | EQUALS STRING
             ;
 
 MATH_EXPRESSION : NUMBER
@@ -70,7 +70,7 @@ MATH_EXPRESSION : NUMBER
 int main(int argc, char **argv)
 {
     char buffer[BUFSIZ];
-    if(argc == 2){
+    if(argc == 2 || argc == 3){
         char* input = fgets(buffer, sizeof buffer, stdin);
         if (buffer == NULL) 
             return -1;
