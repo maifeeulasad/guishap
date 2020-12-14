@@ -38,6 +38,7 @@
 %token  THEN
 
 %token <token> NUMBER
+%token <token> BN_NUMBER
 %token <token> STRING
 %token <token> VARIABLE
 
