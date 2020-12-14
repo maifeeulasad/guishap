@@ -54,12 +54,13 @@ OPERATOR    : O_PLUS
             | O_MULTIPLY
             ;
 
-STATEMENTS  : STATEMENT                                             {printf("statement---\n");}
-            | STATEMENT STATEMENTS                                  {printf("statement---s\n");}
+STATEMENTS  : STATEMENT
+            | STATEMENT STATEMENTS
             ;
-STATEMENT   : KEYWORD_CONSTANT KEYWORD VARIABLE SET_VALUE EOL       {printf("1\n");}
-            | KEYWORD VARIABLE EOL                                  {printf("2\n");}
-            | KEYWORD VARIABLE SET_VALUE EOL                        {printf("3\n");}
+STATEMENT   : KEYWORD_CONSTANT KEYWORD VARIABLE SET_VALUE EOL
+            | KEYWORD VARIABLE EOL
+            | KEYWORD VARIABLE SET_VALUE EOL
+            | CODEBLOCK
             ;
 
 SET_VALUE   : EQUALS MATH_EXPRESSION
@@ -79,6 +80,8 @@ MATH_EXPRESSION : VARIABLE
                 | START_P MATH_EXPRESSION END_P
                 ;
 
+CODEBLOCK   : START_C END_C
+            | START_C STATEMENTS END_C
 
 %%
 
