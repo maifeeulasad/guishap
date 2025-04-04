@@ -2,6 +2,8 @@
 #include "guishap.tab.h"
 #include <string.h>
 
+extern void yyerror(const char *s);
+
 int current_indent = 0;
 int indent_stack[100] = {0};
 int stack_ptr = 0;
