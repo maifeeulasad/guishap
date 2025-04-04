@@ -1,147 +1,128 @@
 %{
-    #include <stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-    #ifdef YYDEBUG
-        yydebug = 1;
-    #endif
-
-    void yyerror (char const *s);
-    int yywrap();
-    int yylex(void);
-    void set_input(const char* input);
+void yyerror(const char *s);
+int yylex(void);
 %}
 
 %union {
-  char *token;
+    char *str;
 }
 
-%token <token>  KEYWORD
-%token  KEYWORD_CONSTANT
+%token IN
+%token INDENT DEDENT NEWLINE
+%token IF ELSE FOR WHILE DEF CLASS RETURN
+%token ADD SUB MUL DIV EQ NE ASSIGN LPAREN RPAREN COLON COMMA
+%token <str> NUMBER BN_NUMBER STRING EN_IDENTIFIER BN_IDENTIFIER KEYWORD_TYPE
 
-%token O_PLUS
-%token O_MINUS
-%token O_DEVIDE
-%token O_MULTIPLY
+%type <str> expression
+%type <str> test
 
-%token  RETURN
-
-%token  START_P
-%token  END_P
-%token  START_C
-%token  END_C
-
-
-%token  EQUALS
-%token  COMMA
-
-%token  IF
-%token  THEN
-
-%token <token> NUMBER
-%token <token> BN_NUMBER
-%token <token> STRING
-%token <token> EN_VARIABLE
-%token <token> BN_VARIABLE
-
-%token EOL
-
-
-%%
-GUISHAP             : STATEMENTS                                            {printf("guishap\n");}
-                    ;
-
-VARIABLE            : BN_VARIABLE
-                    | EN_VARIABLE
-                    ;
-
-OPERATOR            : O_PLUS
-                    | O_MINUS
-                    | O_DEVIDE
-                    | O_MULTIPLY
-                    ;
-
-VAR_DEF             : KEYWORD VARIABLE
-                    | KEYWORD VARIABLE SET_VALUE
-                    ;
-
-VAR_DEF_C           : KEYWORD_CONSTANT KEYWORD VARIABLE SET_VALUE
-                    ;
-
-STATEMENTS          : STATEMENT
-                    | STATEMENT STATEMENTS
-                    ;
-
-STATEMENT           : VAR_DEF EOL
-                    | VAR_DEF_C EOL
-                    | CODEBLOCK
-                    ;
-
-EXPRESSION          : MATH_EXPRESSION
-                    | STRING_EXPRESSION
-                    | FUNCTION
-                    | CALL_FUNCTION
-                    ;
-
-SET_VALUE           : EQUALS EXPRESSION
-                    ;
-
-STRING_EXPRESSION   : VARIABLE
-                    | STRING
-                    | STRING O_PLUS STRING
-                    | STRING O_MULTIPLY MATH_EXPRESSION
-                    | START_P STRING_EXPRESSION END_P
-                    ;
-
-MATH_EXPRESSION     : VARIABLE
-                    | NUMBER
-                    | BN_NUMBER
-                    | NUMBER OPERATOR MATH_EXPRESSION
-                    | START_P MATH_EXPRESSION END_P
-                    ;
-
-CODEBLOCK           : START_C END_C
-                    | START_C STATEMENTS END_C
-                    | START_C STATEMENTS RETURN EXPRESSION EOL END_C
-                    ;
-
-FUNCTION            : VARIABLE START_P PARAM_DEF END_P CODEBLOCK
-                    ;
-
-PARAM_DEF           : VAR_DEF
-                    | VAR_DEF_C
-                    | VAR_DEF COMMA PARAM_DEF
-                    | VAR_DEF_C COMMA PARAM_DEF
-                    ;
-
-CALL_FUNCTION       : VARIABLE START_P END_P
-                    | VARIABLE START_P PARAM_VALUES END_P
-                    ;
-
-PARAM_VALUES        : EXPRESSION
-                    | EXPRESSION COMMA PARAM_VALUES
-                    ;
+%start file_input
 
 %%
 
+file_input: 
+    | file_input stmt 
+    ;
 
-int main(int argc, char **argv)
-{
-    char buffer[BUFSIZ];
-    while(1) {
-        char* input = fgets(buffer, sizeof buffer, stdin);
-        if (buffer == NULL) 
-            break;
-        set_input(input);
-        yyparse();
-        printf("****************Parsing complete************\n");
-    }
-   return 0;
+stmt:
+    simple_stmt
+    | compound_stmt
+    ;
+
+simple_stmt:
+    expr_stmt NEWLINE
+    | return_stmt NEWLINE
+    ;
+
+expr_stmt:
+    assignment
+    | expression
+    ;
+
+compound_stmt:
+    if_stmt
+    | for_stmt
+    | funcdef
+    | classdef
+    ;
+
+assignment:
+    identifier ASSIGN expression
+    { printf("Assignment: %s = %s\n", $1, $3); free($1); free($3); }
+    ;
+
+if_stmt:
+    IF test COLON NEWLINE INDENT stmt DEDENT
+    { printf("If statement\n"); }
+    | IF test COLON NEWLINE INDENT stmt DEDENT ELSE COLON NEWLINE INDENT stmt DEDENT
+    { printf("If-else statement\n"); }
+    ;
+
+for_stmt:
+    FOR identifier IN expression COLON NEWLINE INDENT stmt DEDENT
+    { printf("For loop\n"); }
+    ;
+
+funcdef:
+    DEF identifier LPAREN RPAREN COLON NEWLINE INDENT stmt DEDENT
+    { printf("Function definition: %s\n", $2); free($2); }
+    ;
+
+test:
+    expression comp_op expression
+    { $$ = strcat(strcat($1, $2), $3); }
+    ;
+
+comp_op:
+    EQ | NE
+    ;
+
+expression:
+    term
+    | expression ADD term
+    | expression SUB term
+    ;
+
+term:
+    factor
+    | term MUL factor
+    | term DIV factor
+    ;
+
+factor:
+    NUMBER
+    | BN_NUMBER
+    | STRING
+    | identifier
+    | LPAREN expression RPAREN
+    ;
+
+identifier:
+    EN_IDENTIFIER { $$ = $1; }
+    | BN_IDENTIFIER { $$ = $1; }
+    ;
+
+return_stmt:
+    RETURN expression
+    { printf("Return statement: %s\n", $2); free($2); }
+    ;
+
+classdef:
+    CLASS identifier COLON NEWLINE INDENT stmt DEDENT
+    { printf("Class definition: %s\n", $2); free($2); }
+    ;
+
+
+%%
+
+void yyerror(const char *s) {
+    fprintf(stderr, "Error: %s\n", s);
 }
-int yywrap()
-{
-   return 1;
-}
-void yyerror (char const *s) {
-    printf("Error :\n");
-    fprintf (stderr, "%s\n", s);
+
+int main() {
+    yyparse();
+    return 0;
 }
