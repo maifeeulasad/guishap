@@ -1,6 +1,7 @@
 %{
 #include "guishap.tab.h"
 #include <string.h>
+#include "ast.h"
 
 extern void yyerror(const char *s);
 

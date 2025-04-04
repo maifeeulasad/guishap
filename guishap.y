@@ -2,124 +2,231 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "ast.h"
 
 void yyerror(const char *s);
 int yylex(void);
+
+ASTNode *root = NULL;
+ASTNode *current_block = NULL;
 %}
 
 %union {
     char *str;
+    ASTNode *node;
 }
 
-%token IN
-%token ERROR
+%token IN ERROR
 %token KEYWORD_CONSTANT
 %token INDENT DEDENT NEWLINE
 %token IF ELSE FOR WHILE DEF CLASS RETURN
 %token ADD SUB MUL DIV EQ NE ASSIGN LPAREN RPAREN COLON COMMA
 %token <str> NUMBER BN_NUMBER STRING EN_IDENTIFIER BN_IDENTIFIER KEYWORD_TYPE
 
-%type <str> expression test term factor identifier assignment return_stmt classdef funcdef comp_op
+%type <node> program stmt stmt_list simple_stmt expr_stmt compound_stmt
+%type <node> assignment if_stmt for_stmt funcdef classdef test expression term factor identifier
+%type <node> return_stmt  // ADDED MISSING TYPE DECLARATION
 
-%start file_input
+%start program
 
 %%
 
-file_input: 
-    | file_input stmt 
+program:
+    { 
+        root = create_node(NODE_PROGRAM, "Program");
+        current_block = root;
+    }
+    stmt_list { root->children = $2; }
+    ;
+
+stmt_list:
+    stmt { $$ = $1; }
+    | stmt_list stmt { $1->next = $2; $$ = $1; }
     ;
 
 stmt:
-    simple_stmt
-    | compound_stmt
+    simple_stmt { $$ = $1; }
+    | compound_stmt { $$ = $1; }
     ;
 
 simple_stmt:
-    expr_stmt NEWLINE
-    | return_stmt NEWLINE
+    expr_stmt NEWLINE { $$ = $1; }
+    | return_stmt NEWLINE { $$ = $1; }
     ;
 
 expr_stmt:
-    assignment
-    | expression
+    assignment { $$ = $1; }
+    | expression { $$ = $1; }
     ;
 
 compound_stmt:
-    if_stmt
-    | for_stmt
-    | funcdef
-    | classdef
+    if_stmt { $$ = $1; }
+    | for_stmt { $$ = $1; }
+    | funcdef { $$ = $1; }
+    | classdef { $$ = $1; }
     ;
 
 assignment:
-    identifier ASSIGN expression
-    { printf("Assignment: %s = %s\n", $1, $3); free($1); free($3); }
+    identifier ASSIGN expression {
+        $$ = create_node(NODE_ASSIGNMENT, "=");
+        append_child($$, $1);
+        append_child($$, $3);
+    }
     ;
 
 if_stmt:
-    IF test COLON NEWLINE INDENT stmt DEDENT
-    { printf("If statement\n"); }
-    | IF test COLON NEWLINE INDENT stmt DEDENT ELSE COLON NEWLINE INDENT stmt DEDENT
-    { printf("If-else statement\n"); }
+    IF test COLON NEWLINE INDENT stmt DEDENT {
+        $$ = create_node(NODE_IF, "if");
+        append_child($$, $2);  // FIXED $3 to $2 (test node)
+        append_child($$, $6);  // stmt node
+    }
+    | IF test COLON NEWLINE INDENT stmt DEDENT ELSE COLON NEWLINE INDENT stmt DEDENT {
+        $$ = create_node(NODE_IF, "if-else");
+        append_child($$, $2);  // test node
+        append_child($$, $6);  // then branch
+        append_child($$, $12); // else branch
+    }
     ;
 
 for_stmt:
-    FOR identifier IN expression COLON NEWLINE INDENT stmt DEDENT
-    { printf("For loop\n"); }
+    FOR identifier IN expression COLON NEWLINE INDENT stmt DEDENT {
+        $$ = create_node(NODE_FOR, "for");
+        append_child($$, $2);
+        append_child($$, $4);
+        append_child($$, $8);
+    }
     ;
 
 funcdef:
-    DEF identifier LPAREN RPAREN COLON NEWLINE INDENT stmt DEDENT
-    { printf("Function definition: %s\n", $2); free($2); }
+    DEF identifier LPAREN RPAREN COLON NEWLINE INDENT stmt DEDENT {
+        $$ = create_node(NODE_FUNCTION, "func");
+        append_child($$, $2);
+        append_child($$, $8);
+    }
     ;
 
 test:
-    expression comp_op expression
-    { $$ = (char *) malloc(strlen($1) + strlen($2) + strlen($3) + 1); strcpy($$, $1); strcat($$, $2); strcat($$, $3); }
-    ;
-
-comp_op:
-    EQ { $$ = strdup("=="); }
-    | NE { $$ = strdup("!="); }
+    expression EQ expression {
+        ASTNode *op = create_node(NODE_BINOP, "==");
+        append_child(op, $1);
+        append_child(op, $3);
+        $$ = op;
+    }
+    | expression NE expression {
+        ASTNode *op = create_node(NODE_BINOP, "!=");
+        append_child(op, $1);
+        append_child(op, $3);
+        $$ = op;
+    }
     ;
 
 expression:
-    term
-    | expression ADD term { $$ = (char *) malloc(strlen($1) + strlen($3) + 2); sprintf($$, "%s+%s", $1, $3); free($1); free($3); }
-    | expression SUB term { $$ = (char *) malloc(strlen($1) + strlen($3) + 2); sprintf($$, "%s-%s", $1, $3); free($1); free($3); }
+    term { $$ = $1; }
+    | expression ADD term {
+        ASTNode *op = create_node(NODE_BINOP, "+");
+        append_child(op, $1);
+        append_child(op, $3);
+        $$ = op;
+    }
+    | expression SUB term {
+        ASTNode *op = create_node(NODE_BINOP, "-");
+        append_child(op, $1);
+        append_child(op, $3);
+        $$ = op;
+    }
     ;
 
 term:
-    factor
-    | term MUL factor { $$ = (char *) malloc(strlen($1) + strlen($3) + 2); sprintf($$, "%s*%s", $1, $3); free($1); free($3); }
-    | term DIV factor { $$ = (char *) malloc(strlen($1) + strlen($3) + 2); sprintf($$, "%s/%s", $1, $3); free($1); free($3); }
+    factor { $$ = $1; }
+    | term MUL factor {
+        ASTNode *op = create_node(NODE_BINOP, "*");
+        append_child(op, $1);
+        append_child(op, $3);
+        $$ = op;
+    }
+    | term DIV factor {
+        ASTNode *op = create_node(NODE_BINOP, "/");
+        append_child(op, $1);
+        append_child(op, $3);
+        $$ = op;
+    }
     ;
 
 factor:
-    NUMBER { $$ = $1; }
-    | BN_NUMBER { $$ = $1; }
-    | STRING { $$ = $1; }
+    NUMBER { $$ = create_node(NODE_LITERAL, $1); }
+    | BN_NUMBER { $$ = create_node(NODE_LITERAL, $1); }
+    | STRING { $$ = create_node(NODE_LITERAL, $1); }
     | identifier { $$ = $1; }
     | LPAREN expression RPAREN { $$ = $2; }
     ;
 
 identifier:
-    EN_IDENTIFIER { $$ = $1; }
-    | BN_IDENTIFIER { $$ = $1; }
+    EN_IDENTIFIER { $$ = create_node(NODE_IDENTIFIER, $1); }
+    | BN_IDENTIFIER { $$ = create_node(NODE_IDENTIFIER, $1); }
     ;
 
 return_stmt:
-    RETURN expression
-    { printf("Return statement: %s\n", $2); free($2); }
+    RETURN expression {
+        $$ = create_node(NODE_RETURN, "return");
+        append_child($$, $2);
+    }
     ;
 
 classdef:
-    CLASS identifier COLON NEWLINE INDENT stmt DEDENT
-    { printf("Class definition: %s\n", $2); free($2); }
+    CLASS identifier COLON NEWLINE INDENT stmt DEDENT {
+        $$ = create_node(NODE_CLASS, "class");
+        append_child($$, $2);
+        append_child($$, $6);
+    }
     ;
 
-
 %%
+
+// Implement AST functions
+ASTNode* create_node(NodeType type, char *value) {
+    ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
+    node->type = type;
+    node->value = strdup(value);
+    node->left = node->right = node->children = node->next = NULL;
+    return node;
+}
+
+void append_child(ASTNode *parent, ASTNode *child) {
+    if (!parent->children) {
+        parent->children = child;
+    } else {
+        ASTNode *last = parent->children;
+        while (last->next) last = last->next;
+        last->next = child;
+    }
+}
+
+void free_ast(ASTNode *node) {
+    if (!node) return;
+    free_ast(node->children);
+    free_ast(node->next);
+    free(node->value);
+    free(node);
+}
+
+void print_ast(ASTNode *node, int depth) {
+    if (!node) return;
+    for (int i = 0; i < depth; i++) printf("  ");
+    printf("%s: %s\n", 
+        (node->type == NODE_PROGRAM) ? "Program" :
+        (node->type == NODE_ASSIGNMENT) ? "Assignment" :
+        (node->type == NODE_IDENTIFIER) ? "Identifier" :
+        (node->type == NODE_LITERAL) ? "Literal" :
+        (node->type == NODE_BINOP) ? "BinOp" :
+        (node->type == NODE_FUNCTION) ? "Function" :
+        (node->type == NODE_CLASS) ? "Class" :
+        (node->type == NODE_IF) ? "If" :
+        (node->type == NODE_FOR) ? "For" :
+        (node->type == NODE_RETURN) ? "Return" : "Unknown",
+        node->value);
+    print_ast(node->children, depth + 1);
+    print_ast(node->next, depth);
+}
 
 void yyerror(const char *s) {
     fprintf(stderr, "Error: %s\n", s);
@@ -127,5 +234,8 @@ void yyerror(const char *s) {
 
 int main() {
     yyparse();
+    printf("\nGenerated AST:\n");
+    print_ast(root, 0);
+    free_ast(root);
     return 0;
 }

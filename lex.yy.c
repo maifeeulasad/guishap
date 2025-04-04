@@ -582,6 +582,7 @@ char *yytext;
 #line 2 "guishap.l"
 #include "guishap.tab.h"
 #include <string.h>
+#include "ast.h"
 
 extern void yyerror(const char *s);
 
@@ -589,10 +590,10 @@ int current_indent = 0;
 int indent_stack[100] = {0};
 int stack_ptr = 0;
 int paren_count = 0;
-#line 593 "lex.yy.c"
+#line 594 "lex.yy.c"
 #define YY_NO_INPUT 1
 
-#line 596 "lex.yy.c"
+#line 597 "lex.yy.c"
 
 #define INITIAL 0
 #define INDENT 1
@@ -811,10 +812,10 @@ YY_DECL
 		}
 
 	{
-#line 22 "guishap.l"
+#line 23 "guishap.l"
 
 
-#line 818 "lex.yy.c"
+#line 819 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -885,12 +886,12 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 24 "guishap.l"
+#line 25 "guishap.l"
 ;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 25 "guishap.l"
+#line 26 "guishap.l"
 {
     int spaces = 0;
     for(char *c = yytext; *c; c++) {
@@ -921,161 +922,161 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 52 "guishap.l"
+#line 53 "guishap.l"
 { current_indent = 0; return NEWLINE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 54 "guishap.l"
+#line 55 "guishap.l"
 { return KEYWORD_CONSTANT; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 55 "guishap.l"
+#line 56 "guishap.l"
 { return KEYWORD_TYPE; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 56 "guishap.l"
+#line 57 "guishap.l"
 { return KEYWORD_TYPE; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 57 "guishap.l"
+#line 58 "guishap.l"
 { return IF; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 58 "guishap.l"
+#line 59 "guishap.l"
 { return ELSE; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 59 "guishap.l"
+#line 60 "guishap.l"
 { return FOR; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 60 "guishap.l"
+#line 61 "guishap.l"
 { return WHILE; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 61 "guishap.l"
+#line 62 "guishap.l"
 { return RETURN; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 62 "guishap.l"
+#line 63 "guishap.l"
 { return DEF; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 63 "guishap.l"
+#line 64 "guishap.l"
 { return CLASS; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 65 "guishap.l"
+#line 66 "guishap.l"
 { return ADD; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 66 "guishap.l"
+#line 67 "guishap.l"
 { return SUB; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 67 "guishap.l"
+#line 68 "guishap.l"
 { return MUL; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 68 "guishap.l"
+#line 69 "guishap.l"
 { return DIV; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 69 "guishap.l"
+#line 70 "guishap.l"
 { return EQ; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 70 "guishap.l"
+#line 71 "guishap.l"
 { return NE; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 71 "guishap.l"
+#line 72 "guishap.l"
 { return ASSIGN; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 73 "guishap.l"
+#line 74 "guishap.l"
 { paren_count++; return LPAREN; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 74 "guishap.l"
+#line 75 "guishap.l"
 { paren_count--; return RPAREN; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 75 "guishap.l"
+#line 76 "guishap.l"
 { return COLON; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 76 "guishap.l"
+#line 77 "guishap.l"
 { return COMMA; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 78 "guishap.l"
+#line 79 "guishap.l"
 { yylval.str = strdup(yytext); return BN_NUMBER; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 79 "guishap.l"
+#line 80 "guishap.l"
 { yylval.str = strdup(yytext); return NUMBER; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 81 "guishap.l"
+#line 82 "guishap.l"
 { yylval.str = strdup(yytext); return BN_IDENTIFIER; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 82 "guishap.l"
+#line 83 "guishap.l"
 { yylval.str = strdup(yytext); return EN_IDENTIFIER; }
 	YY_BREAK
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 84 "guishap.l"
+#line 85 "guishap.l"
 { yylval.str = strdup(yytext); return STRING; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 86 "guishap.l"
+#line 87 "guishap.l"
 ; /* Comments */
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 87 "guishap.l"
+#line 88 "guishap.l"
 ; /* Ignore whitespace */
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 88 "guishap.l"
+#line 89 "guishap.l"
 { return yytext[0]; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 89 "guishap.l"
+#line 90 "guishap.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1079 "lex.yy.c"
+#line 1080 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(INDENT):
 	yyterminate();
@@ -2054,4 +2055,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 89 "guishap.l"
+#line 90 "guishap.l"
