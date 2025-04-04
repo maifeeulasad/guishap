@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void yyerror(const char *s);
 int yylex(void);
@@ -11,13 +12,14 @@ int yylex(void);
 }
 
 %token IN
+%token ERROR
+%token KEYWORD_CONSTANT
 %token INDENT DEDENT NEWLINE
 %token IF ELSE FOR WHILE DEF CLASS RETURN
 %token ADD SUB MUL DIV EQ NE ASSIGN LPAREN RPAREN COLON COMMA
 %token <str> NUMBER BN_NUMBER STRING EN_IDENTIFIER BN_IDENTIFIER KEYWORD_TYPE
 
-%type <str> expression
-%type <str> test
+%type <str> expression test term factor identifier assignment return_stmt classdef funcdef comp_op
 
 %start file_input
 
@@ -73,31 +75,32 @@ funcdef:
 
 test:
     expression comp_op expression
-    { $$ = strcat(strcat($1, $2), $3); }
+    { $$ = (char *) malloc(strlen($1) + strlen($2) + strlen($3) + 1); strcpy($$, $1); strcat($$, $2); strcat($$, $3); }
     ;
 
 comp_op:
-    EQ | NE
+    EQ { $$ = strdup("=="); }
+    | NE { $$ = strdup("!="); }
     ;
 
 expression:
     term
-    | expression ADD term
-    | expression SUB term
+    | expression ADD term { $$ = (char *) malloc(strlen($1) + strlen($3) + 2); sprintf($$, "%s+%s", $1, $3); free($1); free($3); }
+    | expression SUB term { $$ = (char *) malloc(strlen($1) + strlen($3) + 2); sprintf($$, "%s-%s", $1, $3); free($1); free($3); }
     ;
 
 term:
     factor
-    | term MUL factor
-    | term DIV factor
+    | term MUL factor { $$ = (char *) malloc(strlen($1) + strlen($3) + 2); sprintf($$, "%s*%s", $1, $3); free($1); free($3); }
+    | term DIV factor { $$ = (char *) malloc(strlen($1) + strlen($3) + 2); sprintf($$, "%s/%s", $1, $3); free($1); free($3); }
     ;
 
 factor:
-    NUMBER
-    | BN_NUMBER
-    | STRING
-    | identifier
-    | LPAREN expression RPAREN
+    NUMBER { $$ = $1; }
+    | BN_NUMBER { $$ = $1; }
+    | STRING { $$ = $1; }
+    | identifier { $$ = $1; }
+    | LPAREN expression RPAREN { $$ = $2; }
     ;
 
 identifier:
