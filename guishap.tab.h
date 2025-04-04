@@ -54,27 +54,36 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    KEYWORD = 258,                 /* KEYWORD  */
-    KEYWORD_CONSTANT = 259,        /* KEYWORD_CONSTANT  */
-    O_PLUS = 260,                  /* O_PLUS  */
-    O_MINUS = 261,                 /* O_MINUS  */
-    O_DEVIDE = 262,                /* O_DEVIDE  */
-    O_MULTIPLY = 263,              /* O_MULTIPLY  */
-    RETURN = 264,                  /* RETURN  */
-    START_P = 265,                 /* START_P  */
-    END_P = 266,                   /* END_P  */
-    START_C = 267,                 /* START_C  */
-    END_C = 268,                   /* END_C  */
-    EQUALS = 269,                  /* EQUALS  */
-    COMMA = 270,                   /* COMMA  */
-    IF = 271,                      /* IF  */
-    THEN = 272,                    /* THEN  */
-    NUMBER = 273,                  /* NUMBER  */
-    BN_NUMBER = 274,               /* BN_NUMBER  */
-    STRING = 275,                  /* STRING  */
-    EN_VARIABLE = 276,             /* EN_VARIABLE  */
-    BN_VARIABLE = 277,             /* BN_VARIABLE  */
-    EOL = 278                      /* EOL  */
+    IN = 258,                      /* IN  */
+    ERROR = 259,                   /* ERROR  */
+    KEYWORD_CONSTANT = 260,        /* KEYWORD_CONSTANT  */
+    INDENT = 261,                  /* INDENT  */
+    DEDENT = 262,                  /* DEDENT  */
+    NEWLINE = 263,                 /* NEWLINE  */
+    IF = 264,                      /* IF  */
+    ELSE = 265,                    /* ELSE  */
+    FOR = 266,                     /* FOR  */
+    WHILE = 267,                   /* WHILE  */
+    DEF = 268,                     /* DEF  */
+    CLASS = 269,                   /* CLASS  */
+    RETURN = 270,                  /* RETURN  */
+    ADD = 271,                     /* ADD  */
+    SUB = 272,                     /* SUB  */
+    MUL = 273,                     /* MUL  */
+    DIV = 274,                     /* DIV  */
+    EQ = 275,                      /* EQ  */
+    NE = 276,                      /* NE  */
+    ASSIGN = 277,                  /* ASSIGN  */
+    LPAREN = 278,                  /* LPAREN  */
+    RPAREN = 279,                  /* RPAREN  */
+    COLON = 280,                   /* COLON  */
+    COMMA = 281,                   /* COMMA  */
+    NUMBER = 282,                  /* NUMBER  */
+    BN_NUMBER = 283,               /* BN_NUMBER  */
+    STRING = 284,                  /* STRING  */
+    EN_IDENTIFIER = 285,           /* EN_IDENTIFIER  */
+    BN_IDENTIFIER = 286,           /* BN_IDENTIFIER  */
+    KEYWORD_TYPE = 287             /* KEYWORD_TYPE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -83,11 +92,11 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 14 "guishap.y"
+#line 10 "guishap.y"
 
-  char *token;
+    char *str;
 
-#line 91 "guishap.tab.h"
+#line 100 "guishap.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
