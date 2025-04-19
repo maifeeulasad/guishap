@@ -580,9 +580,9 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "guishap.l"
 #line 2 "guishap.l"
+#include "ast.h"
 #include "guishap.tab.h"
 #include <string.h>
-#include "ast.h"
 
 extern void yyerror(const char *s);
 
