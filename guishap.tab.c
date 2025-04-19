@@ -72,11 +72,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "ast.h"
 
 void yyerror(const char *s);
 int yylex(void);
 
-#line 80 "guishap.tab.c"
+ASTNode *root = NULL;
+ASTNode *current_block = NULL;
+
+#line 84 "guishap.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -138,23 +142,24 @@ enum yysymbol_kind_t
   YYSYMBOL_BN_IDENTIFIER = 31,             /* BN_IDENTIFIER  */
   YYSYMBOL_KEYWORD_TYPE = 32,              /* KEYWORD_TYPE  */
   YYSYMBOL_YYACCEPT = 33,                  /* $accept  */
-  YYSYMBOL_file_input = 34,                /* file_input  */
-  YYSYMBOL_stmt = 35,                      /* stmt  */
-  YYSYMBOL_simple_stmt = 36,               /* simple_stmt  */
-  YYSYMBOL_expr_stmt = 37,                 /* expr_stmt  */
-  YYSYMBOL_assignment = 38,                /* assignment  */
-  YYSYMBOL_compound_stmt = 39,             /* compound_stmt  */
-  YYSYMBOL_if_stmt = 40,                   /* if_stmt  */
-  YYSYMBOL_for_stmt = 41,                  /* for_stmt  */
-  YYSYMBOL_funcdef = 42,                   /* funcdef  */
-  YYSYMBOL_test = 43,                      /* test  */
-  YYSYMBOL_comp_op = 44,                   /* comp_op  */
-  YYSYMBOL_expression = 45,                /* expression  */
-  YYSYMBOL_term = 46,                      /* term  */
-  YYSYMBOL_factor = 47,                    /* factor  */
-  YYSYMBOL_identifier = 48,                /* identifier  */
-  YYSYMBOL_return_stmt = 49,               /* return_stmt  */
-  YYSYMBOL_classdef = 50                   /* classdef  */
+  YYSYMBOL_program = 34,                   /* program  */
+  YYSYMBOL_35_1 = 35,                      /* $@1  */
+  YYSYMBOL_stmt_list = 36,                 /* stmt_list  */
+  YYSYMBOL_stmt = 37,                      /* stmt  */
+  YYSYMBOL_simple_stmt = 38,               /* simple_stmt  */
+  YYSYMBOL_expr_stmt = 39,                 /* expr_stmt  */
+  YYSYMBOL_compound_stmt = 40,             /* compound_stmt  */
+  YYSYMBOL_assignment = 41,                /* assignment  */
+  YYSYMBOL_if_stmt = 42,                   /* if_stmt  */
+  YYSYMBOL_for_stmt = 43,                  /* for_stmt  */
+  YYSYMBOL_funcdef = 44,                   /* funcdef  */
+  YYSYMBOL_test = 45,                      /* test  */
+  YYSYMBOL_expression = 46,                /* expression  */
+  YYSYMBOL_term = 47,                      /* term  */
+  YYSYMBOL_factor = 48,                    /* factor  */
+  YYSYMBOL_identifier = 49,                /* identifier  */
+  YYSYMBOL_return_stmt = 50,               /* return_stmt  */
+  YYSYMBOL_classdef = 51                   /* classdef  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -480,18 +485,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  2
+#define YYFINAL  3
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   94
+#define YYLAST   87
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  33
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  18
+#define YYNNTS  19
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  36
+#define YYNRULES  37
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  83
+#define YYNSTATES  86
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   287
@@ -541,12 +546,12 @@ static const yytype_int8 yytranslate[] =
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_int8 yyrline[] =
+static const yytype_uint8 yyrline[] =
 {
-       0,    28,    28,    29,    33,    34,    38,    39,    43,    44,
-      48,    53,    54,    55,    56,    60,    62,    67,    72,    77,
-      82,    83,    87,    88,    89,    93,    94,    95,    99,   100,
-     101,   102,   103,   107,   108,   112,   117
+       0,    35,    35,    35,    43,    44,    48,    49,    53,    54,
+      58,    59,    63,    64,    65,    66,    70,    78,    83,    92,
+     101,   109,   115,   124,   125,   131,   140,   141,   147,   156,
+     157,   158,   159,   160,   164,   165,   169,   176
 };
 #endif
 
@@ -567,10 +572,10 @@ static const char *const yytname[] =
   "WHILE", "DEF", "CLASS", "RETURN", "ADD", "SUB", "MUL", "DIV", "EQ",
   "NE", "ASSIGN", "LPAREN", "RPAREN", "COLON", "COMMA", "NUMBER",
   "BN_NUMBER", "STRING", "EN_IDENTIFIER", "BN_IDENTIFIER", "KEYWORD_TYPE",
-  "$accept", "file_input", "stmt", "simple_stmt", "expr_stmt",
-  "assignment", "compound_stmt", "if_stmt", "for_stmt", "funcdef", "test",
-  "comp_op", "expression", "term", "factor", "identifier", "return_stmt",
-  "classdef", YY_NULLPTR
+  "$accept", "program", "$@1", "stmt_list", "stmt", "simple_stmt",
+  "expr_stmt", "compound_stmt", "assignment", "if_stmt", "for_stmt",
+  "funcdef", "test", "expression", "term", "factor", "identifier",
+  "return_stmt", "classdef", YY_NULLPTR
 };
 
 static const char *
@@ -580,7 +585,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-48)
+#define YYPACT_NINF (-15)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -594,15 +599,15 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -48,     7,   -48,    53,   -18,   -18,   -18,    53,    53,   -48,
-     -48,   -48,   -48,   -48,   -48,   -48,     0,   -48,   -48,   -48,
-     -48,   -48,     9,    10,   -48,    -7,    11,   -48,     2,    25,
-     -48,    36,    20,    29,     9,   -15,   -48,    53,    53,    53,
-      53,    53,   -48,    48,   -48,   -48,    53,    53,    37,    54,
-     -48,    10,    10,   -48,   -48,     9,    58,     9,    15,    40,
-      60,    44,    69,    70,    44,    61,    79,    80,    81,    77,
-      44,    44,   -48,    64,    83,    84,    85,   -48,   -48,    86,
-      44,    87,   -48
+     -15,     2,     8,   -15,    -3,    10,    10,    10,    -3,    -3,
+     -15,   -15,   -15,   -15,   -15,     8,   -15,   -15,     0,   -15,
+     -15,   -15,   -15,   -15,    26,    27,   -15,    22,     4,   -15,
+      24,    13,   -15,    29,    38,    39,    26,   -10,   -15,   -15,
+      -3,    -3,    -3,    -3,    -3,   -15,    44,    -3,    -3,    -3,
+      42,    55,   -15,    27,    27,   -15,   -15,    26,    61,    26,
+      26,    -7,    43,    64,     8,    65,    66,     8,    68,    70,
+      71,    72,    73,     8,     8,   -15,    53,    75,    77,    78,
+     -15,   -15,    74,     8,    80,   -15
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -610,29 +615,29 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     0,     1,     0,     0,     0,     0,     0,     0,    28,
-      29,    30,    33,    34,     3,     4,     0,     8,     5,    11,
-      12,    13,     9,    22,    25,    31,     0,    14,     0,     0,
-      31,     0,     0,     0,    35,     0,     6,     0,     0,     0,
-       0,     0,     7,     0,    20,    21,     0,     0,     0,     0,
-      32,    23,    24,    26,    27,    10,     0,    19,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,    15,
-       0,     0,    36,     0,     0,     0,     0,    17,    18,     0,
-       0,     0,    16
+       2,     0,     0,     1,     0,     0,     0,     0,     0,     0,
+      29,    30,    31,    34,    35,     3,     4,     6,     0,     7,
+      10,    12,    13,    14,    11,    23,    26,    32,     0,    15,
+       0,     0,    32,     0,     0,     0,    36,     0,     5,     8,
+       0,     0,     0,     0,     0,     9,     0,     0,     0,     0,
+       0,     0,    33,    24,    25,    27,    28,    16,     0,    21,
+      22,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    17,     0,     0,    37,     0,     0,     0,     0,
+      19,    20,     0,     0,     0,    18
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -48,   -48,   -47,   -48,   -48,   -48,   -48,   -48,   -48,   -48,
-     -48,   -48,     3,    14,     8,    -1,   -48,   -48
+     -15,   -15,   -15,   -15,   -14,   -15,   -15,   -15,   -15,   -15,
+     -15,   -15,   -15,     7,    17,     5,    -2,   -15,   -15
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1,    14,    15,    16,    17,    18,    19,    20,    21,
-      28,    46,    22,    23,    24,    30,    26,    27
+       0,     1,     2,    15,    16,    17,    18,    19,    20,    21,
+      22,    23,    30,    24,    25,    26,    32,    28,    29
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -640,63 +645,61 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      25,    37,    38,    31,    32,    33,    29,     2,    36,    50,
-      34,    35,    12,    13,    65,    41,     3,    68,     4,    42,
-       5,     6,     7,    74,    75,    37,    38,    43,    39,    40,
-       8,    37,    38,    81,     9,    10,    11,    12,    13,    47,
-      62,    37,    38,    48,    55,    44,    45,    53,    54,    57,
-      58,    51,    52,     3,    49,     4,    56,     5,     6,     7,
-      25,    59,    60,    25,    61,    63,    64,     8,    69,    25,
-      25,     9,    10,    11,    12,    13,     8,    66,    67,    25,
-       9,    10,    11,    12,    13,    70,    71,    73,    72,    76,
-      77,    78,    80,    79,    82
+      27,    38,     3,    33,    34,    35,    40,    41,    39,    40,
+      41,    31,    45,    27,    52,    36,    37,     4,    65,     5,
+       9,     6,     7,     8,    10,    11,    12,    13,    14,    40,
+      41,     9,    49,    47,    48,    10,    11,    12,    13,    14,
+      13,    14,    40,    41,    44,    42,    43,    55,    56,    46,
+      68,    57,    58,    71,    59,    60,    61,    53,    54,    77,
+      78,    50,    27,    63,    51,    27,    62,    64,    66,    84,
+      67,    27,    27,    69,    70,    72,    73,    74,    79,    75,
+      83,    27,    80,    76,    81,     0,    82,    85
 };
 
 static const yytype_int8 yycheck[] =
 {
-       1,    16,    17,     4,     5,     6,     3,     0,     8,    24,
-       7,     8,    30,    31,    61,    22,     9,    64,    11,     8,
-      13,    14,    15,    70,    71,    16,    17,    25,    18,    19,
-      23,    16,    17,    80,    27,    28,    29,    30,    31,     3,
-      25,    16,    17,    23,    41,    20,    21,    39,    40,    46,
-      47,    37,    38,     9,    25,    11,     8,    13,    14,    15,
-      61,    24,     8,    64,     6,    25,     6,    23,     7,    70,
-      71,    27,    28,    29,    30,    31,    23,     8,     8,    80,
-      27,    28,    29,    30,    31,     6,     6,    10,     7,    25,
-       7,     7,     6,     8,     7
+       2,    15,     0,     5,     6,     7,    16,    17,     8,    16,
+      17,     4,     8,    15,    24,     8,     9,     9,    25,    11,
+      23,    13,    14,    15,    27,    28,    29,    30,    31,    16,
+      17,    23,     3,    20,    21,    27,    28,    29,    30,    31,
+      30,    31,    16,    17,    22,    18,    19,    42,    43,    25,
+      64,    44,     8,    67,    47,    48,    49,    40,    41,    73,
+      74,    23,    64,     8,    25,    67,    24,     6,    25,    83,
+       6,    73,    74,     8,     8,     7,     6,     6,    25,     7,
+       6,    83,     7,    10,     7,    -1,     8,     7
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    34,     0,     9,    11,    13,    14,    15,    23,    27,
-      28,    29,    30,    31,    35,    36,    37,    38,    39,    40,
-      41,    42,    45,    46,    47,    48,    49,    50,    43,    45,
-      48,    48,    48,    48,    45,    45,     8,    16,    17,    18,
-      19,    22,     8,    25,    20,    21,    44,     3,    23,    25,
-      24,    46,    46,    47,    47,    45,     8,    45,    45,    24,
-       8,     6,    25,    25,     6,    35,     8,     8,    35,     7,
-       6,     6,     7,    10,    35,    35,    25,     7,     7,     8,
-       6,    35,     7
+       0,    34,    35,     0,     9,    11,    13,    14,    15,    23,
+      27,    28,    29,    30,    31,    36,    37,    38,    39,    40,
+      41,    42,    43,    44,    46,    47,    48,    49,    50,    51,
+      45,    46,    49,    49,    49,    49,    46,    46,    37,     8,
+      16,    17,    18,    19,    22,     8,    25,    20,    21,     3,
+      23,    25,    24,    47,    47,    48,    48,    46,     8,    46,
+      46,    46,    24,     8,     6,    25,    25,     6,    37,     8,
+       8,    37,     7,     6,     6,     7,    10,    37,    37,    25,
+       7,     7,     8,     6,    37,     7
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    33,    34,    34,    35,    35,    36,    36,    37,    37,
-      38,    39,    39,    39,    39,    40,    40,    41,    42,    43,
-      44,    44,    45,    45,    45,    46,    46,    46,    47,    47,
-      47,    47,    47,    48,    48,    49,    50
+       0,    33,    35,    34,    36,    36,    37,    37,    38,    38,
+      39,    39,    40,    40,    40,    40,    41,    42,    42,    43,
+      44,    45,    45,    46,    46,    46,    47,    47,    47,    48,
+      48,    48,    48,    48,    49,    49,    50,    51
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     0,     2,     1,     1,     2,     2,     1,     1,
-       3,     1,     1,     1,     1,     7,    13,     9,     9,     3,
-       1,     1,     1,     3,     3,     1,     3,     3,     1,     1,
-       1,     1,     3,     1,     1,     2,     7
+       0,     2,     0,     2,     1,     2,     1,     1,     2,     2,
+       1,     1,     1,     1,     1,     1,     3,     7,    13,     9,
+       9,     3,     3,     1,     3,     3,     1,     3,     3,     1,
+       1,     1,     1,     3,     1,     1,     2,     7
 };
 
 
@@ -1159,134 +1162,286 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 10: /* assignment: identifier ASSIGN expression  */
-#line 49 "guishap.y"
-    { printf("Assignment: %s = %s\n", (yyvsp[-2].str), (yyvsp[0].str)); free((yyvsp[-2].str)); free((yyvsp[0].str)); }
-#line 1166 "guishap.tab.c"
-    break;
-
-  case 15: /* if_stmt: IF test COLON NEWLINE INDENT stmt DEDENT  */
-#line 61 "guishap.y"
-    { printf("If statement\n"); }
+  case 2: /* $@1: %empty  */
+#line 35 "guishap.y"
+    { 
+        root = create_node(NODE_PROGRAM, "Program");
+        current_block = root;
+    }
 #line 1172 "guishap.tab.c"
     break;
 
-  case 16: /* if_stmt: IF test COLON NEWLINE INDENT stmt DEDENT ELSE COLON NEWLINE INDENT stmt DEDENT  */
-#line 63 "guishap.y"
-    { printf("If-else statement\n"); }
+  case 3: /* program: $@1 stmt_list  */
+#line 39 "guishap.y"
+              { root->children = (yyvsp[0].node); }
 #line 1178 "guishap.tab.c"
     break;
 
-  case 17: /* for_stmt: FOR identifier IN expression COLON NEWLINE INDENT stmt DEDENT  */
-#line 68 "guishap.y"
-    { printf("For loop\n"); }
+  case 4: /* stmt_list: stmt  */
+#line 43 "guishap.y"
+         { (yyval.node) = (yyvsp[0].node); }
 #line 1184 "guishap.tab.c"
     break;
 
-  case 18: /* funcdef: DEF identifier LPAREN RPAREN COLON NEWLINE INDENT stmt DEDENT  */
-#line 73 "guishap.y"
-    { printf("Function definition: %s\n", (yyvsp[-7].str)); free((yyvsp[-7].str)); }
+  case 5: /* stmt_list: stmt_list stmt  */
+#line 44 "guishap.y"
+                     { (yyvsp[-1].node)->next = (yyvsp[0].node); (yyval.node) = (yyvsp[-1].node); }
 #line 1190 "guishap.tab.c"
     break;
 
-  case 19: /* test: expression comp_op expression  */
-#line 78 "guishap.y"
-    { (yyval.str) = (char *) malloc(strlen((yyvsp[-2].str)) + strlen((yyvsp[-1].str)) + strlen((yyvsp[0].str)) + 1); strcpy((yyval.str), (yyvsp[-2].str)); strcat((yyval.str), (yyvsp[-1].str)); strcat((yyval.str), (yyvsp[0].str)); }
+  case 6: /* stmt: simple_stmt  */
+#line 48 "guishap.y"
+                { (yyval.node) = (yyvsp[0].node); }
 #line 1196 "guishap.tab.c"
     break;
 
-  case 20: /* comp_op: EQ  */
-#line 82 "guishap.y"
-       { (yyval.str) = strdup("=="); }
+  case 7: /* stmt: compound_stmt  */
+#line 49 "guishap.y"
+                    { (yyval.node) = (yyvsp[0].node); }
 #line 1202 "guishap.tab.c"
     break;
 
-  case 21: /* comp_op: NE  */
-#line 83 "guishap.y"
-         { (yyval.str) = strdup("!="); }
+  case 8: /* simple_stmt: expr_stmt NEWLINE  */
+#line 53 "guishap.y"
+                      { (yyval.node) = (yyvsp[-1].node); }
 #line 1208 "guishap.tab.c"
     break;
 
-  case 23: /* expression: expression ADD term  */
-#line 88 "guishap.y"
-                          { (yyval.str) = (char *) malloc(strlen((yyvsp[-2].str)) + strlen((yyvsp[0].str)) + 2); sprintf((yyval.str), "%s+%s", (yyvsp[-2].str), (yyvsp[0].str)); free((yyvsp[-2].str)); free((yyvsp[0].str)); }
+  case 9: /* simple_stmt: return_stmt NEWLINE  */
+#line 54 "guishap.y"
+                          { (yyval.node) = (yyvsp[-1].node); }
 #line 1214 "guishap.tab.c"
     break;
 
-  case 24: /* expression: expression SUB term  */
-#line 89 "guishap.y"
-                          { (yyval.str) = (char *) malloc(strlen((yyvsp[-2].str)) + strlen((yyvsp[0].str)) + 2); sprintf((yyval.str), "%s-%s", (yyvsp[-2].str), (yyvsp[0].str)); free((yyvsp[-2].str)); free((yyvsp[0].str)); }
+  case 10: /* expr_stmt: assignment  */
+#line 58 "guishap.y"
+               { (yyval.node) = (yyvsp[0].node); }
 #line 1220 "guishap.tab.c"
     break;
 
-  case 26: /* term: term MUL factor  */
-#line 94 "guishap.y"
-                      { (yyval.str) = (char *) malloc(strlen((yyvsp[-2].str)) + strlen((yyvsp[0].str)) + 2); sprintf((yyval.str), "%s*%s", (yyvsp[-2].str), (yyvsp[0].str)); free((yyvsp[-2].str)); free((yyvsp[0].str)); }
+  case 11: /* expr_stmt: expression  */
+#line 59 "guishap.y"
+                 { (yyval.node) = (yyvsp[0].node); }
 #line 1226 "guishap.tab.c"
     break;
 
-  case 27: /* term: term DIV factor  */
-#line 95 "guishap.y"
-                      { (yyval.str) = (char *) malloc(strlen((yyvsp[-2].str)) + strlen((yyvsp[0].str)) + 2); sprintf((yyval.str), "%s/%s", (yyvsp[-2].str), (yyvsp[0].str)); free((yyvsp[-2].str)); free((yyvsp[0].str)); }
+  case 12: /* compound_stmt: if_stmt  */
+#line 63 "guishap.y"
+            { (yyval.node) = (yyvsp[0].node); }
 #line 1232 "guishap.tab.c"
     break;
 
-  case 28: /* factor: NUMBER  */
-#line 99 "guishap.y"
-           { (yyval.str) = (yyvsp[0].str); }
+  case 13: /* compound_stmt: for_stmt  */
+#line 64 "guishap.y"
+               { (yyval.node) = (yyvsp[0].node); }
 #line 1238 "guishap.tab.c"
     break;
 
-  case 29: /* factor: BN_NUMBER  */
-#line 100 "guishap.y"
-                { (yyval.str) = (yyvsp[0].str); }
+  case 14: /* compound_stmt: funcdef  */
+#line 65 "guishap.y"
+              { (yyval.node) = (yyvsp[0].node); }
 #line 1244 "guishap.tab.c"
     break;
 
-  case 30: /* factor: STRING  */
-#line 101 "guishap.y"
-             { (yyval.str) = (yyvsp[0].str); }
+  case 15: /* compound_stmt: classdef  */
+#line 66 "guishap.y"
+               { (yyval.node) = (yyvsp[0].node); }
 #line 1250 "guishap.tab.c"
     break;
 
-  case 31: /* factor: identifier  */
-#line 102 "guishap.y"
-                 { (yyval.str) = (yyvsp[0].str); }
-#line 1256 "guishap.tab.c"
+  case 16: /* assignment: identifier ASSIGN expression  */
+#line 70 "guishap.y"
+                                 {
+        (yyval.node) = create_node(NODE_ASSIGNMENT, "=");
+        append_child((yyval.node), (yyvsp[-2].node));
+        append_child((yyval.node), (yyvsp[0].node));
+    }
+#line 1260 "guishap.tab.c"
     break;
 
-  case 32: /* factor: LPAREN expression RPAREN  */
-#line 103 "guishap.y"
-                               { (yyval.str) = (yyvsp[-1].str); }
-#line 1262 "guishap.tab.c"
+  case 17: /* if_stmt: IF test COLON NEWLINE INDENT stmt DEDENT  */
+#line 78 "guishap.y"
+                                             {
+        (yyval.node) = create_node(NODE_IF, "if");
+        append_child((yyval.node), (yyvsp[-5].node));  // FIXED $3 to $2 (test node)
+        append_child((yyval.node), (yyvsp[-1].node));  // stmt node
+    }
+#line 1270 "guishap.tab.c"
     break;
 
-  case 33: /* identifier: EN_IDENTIFIER  */
-#line 107 "guishap.y"
-                  { (yyval.str) = (yyvsp[0].str); }
-#line 1268 "guishap.tab.c"
+  case 18: /* if_stmt: IF test COLON NEWLINE INDENT stmt DEDENT ELSE COLON NEWLINE INDENT stmt DEDENT  */
+#line 83 "guishap.y"
+                                                                                     {
+        (yyval.node) = create_node(NODE_IF, "if-else");
+        append_child((yyval.node), (yyvsp[-11].node));  // test node
+        append_child((yyval.node), (yyvsp[-7].node));  // then branch
+        append_child((yyval.node), (yyvsp[-1].node)); // else branch
+    }
+#line 1281 "guishap.tab.c"
     break;
 
-  case 34: /* identifier: BN_IDENTIFIER  */
-#line 108 "guishap.y"
-                    { (yyval.str) = (yyvsp[0].str); }
-#line 1274 "guishap.tab.c"
+  case 19: /* for_stmt: FOR identifier IN expression COLON NEWLINE INDENT stmt DEDENT  */
+#line 92 "guishap.y"
+                                                                  {
+        (yyval.node) = create_node(NODE_FOR, "for");
+        append_child((yyval.node), (yyvsp[-7].node));
+        append_child((yyval.node), (yyvsp[-5].node));
+        append_child((yyval.node), (yyvsp[-1].node));
+    }
+#line 1292 "guishap.tab.c"
     break;
 
-  case 35: /* return_stmt: RETURN expression  */
-#line 113 "guishap.y"
-    { printf("Return statement: %s\n", (yyvsp[0].str)); free((yyvsp[0].str)); }
-#line 1280 "guishap.tab.c"
+  case 20: /* funcdef: DEF identifier LPAREN RPAREN COLON NEWLINE INDENT stmt DEDENT  */
+#line 101 "guishap.y"
+                                                                  {
+        (yyval.node) = create_node(NODE_FUNCTION, "func");
+        append_child((yyval.node), (yyvsp[-7].node));
+        append_child((yyval.node), (yyvsp[-1].node));
+    }
+#line 1302 "guishap.tab.c"
     break;
 
-  case 36: /* classdef: CLASS identifier COLON NEWLINE INDENT stmt DEDENT  */
-#line 118 "guishap.y"
-    { printf("Class definition: %s\n", (yyvsp[-5].str)); free((yyvsp[-5].str)); }
-#line 1286 "guishap.tab.c"
+  case 21: /* test: expression EQ expression  */
+#line 109 "guishap.y"
+                             {
+        ASTNode *op = create_node(NODE_BINOP, "==");
+        append_child(op, (yyvsp[-2].node));
+        append_child(op, (yyvsp[0].node));
+        (yyval.node) = op;
+    }
+#line 1313 "guishap.tab.c"
+    break;
+
+  case 22: /* test: expression NE expression  */
+#line 115 "guishap.y"
+                               {
+        ASTNode *op = create_node(NODE_BINOP, "!=");
+        append_child(op, (yyvsp[-2].node));
+        append_child(op, (yyvsp[0].node));
+        (yyval.node) = op;
+    }
+#line 1324 "guishap.tab.c"
+    break;
+
+  case 23: /* expression: term  */
+#line 124 "guishap.y"
+         { (yyval.node) = (yyvsp[0].node); }
+#line 1330 "guishap.tab.c"
+    break;
+
+  case 24: /* expression: expression ADD term  */
+#line 125 "guishap.y"
+                          {
+        ASTNode *op = create_node(NODE_BINOP, "+");
+        append_child(op, (yyvsp[-2].node));
+        append_child(op, (yyvsp[0].node));
+        (yyval.node) = op;
+    }
+#line 1341 "guishap.tab.c"
+    break;
+
+  case 25: /* expression: expression SUB term  */
+#line 131 "guishap.y"
+                          {
+        ASTNode *op = create_node(NODE_BINOP, "-");
+        append_child(op, (yyvsp[-2].node));
+        append_child(op, (yyvsp[0].node));
+        (yyval.node) = op;
+    }
+#line 1352 "guishap.tab.c"
+    break;
+
+  case 26: /* term: factor  */
+#line 140 "guishap.y"
+           { (yyval.node) = (yyvsp[0].node); }
+#line 1358 "guishap.tab.c"
+    break;
+
+  case 27: /* term: term MUL factor  */
+#line 141 "guishap.y"
+                      {
+        ASTNode *op = create_node(NODE_BINOP, "*");
+        append_child(op, (yyvsp[-2].node));
+        append_child(op, (yyvsp[0].node));
+        (yyval.node) = op;
+    }
+#line 1369 "guishap.tab.c"
+    break;
+
+  case 28: /* term: term DIV factor  */
+#line 147 "guishap.y"
+                      {
+        ASTNode *op = create_node(NODE_BINOP, "/");
+        append_child(op, (yyvsp[-2].node));
+        append_child(op, (yyvsp[0].node));
+        (yyval.node) = op;
+    }
+#line 1380 "guishap.tab.c"
+    break;
+
+  case 29: /* factor: NUMBER  */
+#line 156 "guishap.y"
+           { (yyval.node) = create_node(NODE_LITERAL, (yyvsp[0].str)); }
+#line 1386 "guishap.tab.c"
+    break;
+
+  case 30: /* factor: BN_NUMBER  */
+#line 157 "guishap.y"
+                { (yyval.node) = create_node(NODE_LITERAL, (yyvsp[0].str)); }
+#line 1392 "guishap.tab.c"
+    break;
+
+  case 31: /* factor: STRING  */
+#line 158 "guishap.y"
+             { (yyval.node) = create_node(NODE_LITERAL, (yyvsp[0].str)); }
+#line 1398 "guishap.tab.c"
+    break;
+
+  case 32: /* factor: identifier  */
+#line 159 "guishap.y"
+                 { (yyval.node) = (yyvsp[0].node); }
+#line 1404 "guishap.tab.c"
+    break;
+
+  case 33: /* factor: LPAREN expression RPAREN  */
+#line 160 "guishap.y"
+                               { (yyval.node) = (yyvsp[-1].node); }
+#line 1410 "guishap.tab.c"
+    break;
+
+  case 34: /* identifier: EN_IDENTIFIER  */
+#line 164 "guishap.y"
+                  { (yyval.node) = create_node(NODE_IDENTIFIER, (yyvsp[0].str)); }
+#line 1416 "guishap.tab.c"
+    break;
+
+  case 35: /* identifier: BN_IDENTIFIER  */
+#line 165 "guishap.y"
+                    { (yyval.node) = create_node(NODE_IDENTIFIER, (yyvsp[0].str)); }
+#line 1422 "guishap.tab.c"
+    break;
+
+  case 36: /* return_stmt: RETURN expression  */
+#line 169 "guishap.y"
+                      {
+        (yyval.node) = create_node(NODE_RETURN, "return");
+        append_child((yyval.node), (yyvsp[0].node));
+    }
+#line 1431 "guishap.tab.c"
+    break;
+
+  case 37: /* classdef: CLASS identifier COLON NEWLINE INDENT stmt DEDENT  */
+#line 176 "guishap.y"
+                                                      {
+        (yyval.node) = create_node(NODE_CLASS, "class");
+        append_child((yyval.node), (yyvsp[-5].node));
+        append_child((yyval.node), (yyvsp[-1].node));
+    }
+#line 1441 "guishap.tab.c"
     break;
 
 
-#line 1290 "guishap.tab.c"
+#line 1445 "guishap.tab.c"
 
       default: break;
     }
@@ -1479,8 +1634,54 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 121 "guishap.y"
+#line 183 "guishap.y"
 
+
+// Implement AST functions
+ASTNode* create_node(NodeType type, char *value) {
+    ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
+    node->type = type;
+    node->value = strdup(value);
+    node->left = node->right = node->children = node->next = NULL;
+    return node;
+}
+
+void append_child(ASTNode *parent, ASTNode *child) {
+    if (!parent->children) {
+        parent->children = child;
+    } else {
+        ASTNode *last = parent->children;
+        while (last->next) last = last->next;
+        last->next = child;
+    }
+}
+
+void free_ast(ASTNode *node) {
+    if (!node) return;
+    free_ast(node->children);
+    free_ast(node->next);
+    free(node->value);
+    free(node);
+}
+
+void print_ast(ASTNode *node, int depth) {
+    if (!node) return;
+    for (int i = 0; i < depth; i++) printf("  ");
+    printf("%s: %s\n", 
+        (node->type == NODE_PROGRAM) ? "Program" :
+        (node->type == NODE_ASSIGNMENT) ? "Assignment" :
+        (node->type == NODE_IDENTIFIER) ? "Identifier" :
+        (node->type == NODE_LITERAL) ? "Literal" :
+        (node->type == NODE_BINOP) ? "BinOp" :
+        (node->type == NODE_FUNCTION) ? "Function" :
+        (node->type == NODE_CLASS) ? "Class" :
+        (node->type == NODE_IF) ? "If" :
+        (node->type == NODE_FOR) ? "For" :
+        (node->type == NODE_RETURN) ? "Return" : "Unknown",
+        node->value);
+    print_ast(node->children, depth + 1);
+    print_ast(node->next, depth);
+}
 
 void yyerror(const char *s) {
     fprintf(stderr, "Error: %s\n", s);
@@ -1488,5 +1689,8 @@ void yyerror(const char *s) {
 
 int main() {
     yyparse();
+    printf("\nGenerated AST:\n");
+    print_ast(root, 0);
+    free_ast(root);
     return 0;
 }

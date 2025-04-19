@@ -39,7 +39,7 @@
 # define YY_YY_GUISHAP_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+# define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -92,11 +92,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 10 "guishap.y"
+#line 14 "guishap.y"
 
     char *str;
+    ASTNode *node;
 
-#line 100 "guishap.tab.h"
+#line 101 "guishap.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

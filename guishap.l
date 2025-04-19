@@ -1,4 +1,5 @@
 %{
+#include "ast.h"
 #include "guishap.tab.h"
 #include <string.h>
 
