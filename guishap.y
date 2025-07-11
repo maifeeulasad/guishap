@@ -6,6 +6,7 @@
 
 void yyerror(const char *s);
 int yylex(void);
+void gen_wasm(ASTNode *node, FILE *out);
 
 ASTNode *root = NULL;
 ASTNode *current_block = NULL;
@@ -233,9 +234,12 @@ void yyerror(const char *s) {
 }
 
 int main() {
-    yyparse();
-    printf("\nGenerated AST:\n");
-    print_ast(root, 0);
+    if (yyparse() == 0 && root != NULL) {
+        fprintf(stderr, "\nGenerated AST:\n");
+        print_ast(root, 0);
+
+        gen_wasm(root, stdout); // <-- clean wat output to stdout
+    }
     free_ast(root);
     return 0;
 }
