@@ -92,7 +92,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 14 "guishap.y"
+#line 15 "guishap.y"
 
     char *str;
     ASTNode *node;

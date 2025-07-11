@@ -76,11 +76,12 @@
 
 void yyerror(const char *s);
 int yylex(void);
+void gen_wasm(ASTNode *node, FILE *out);
 
 ASTNode *root = NULL;
 ASTNode *current_block = NULL;
 
-#line 84 "guishap.tab.c"
+#line 85 "guishap.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -548,10 +549,10 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    35,    35,    35,    43,    44,    48,    49,    53,    54,
-      58,    59,    63,    64,    65,    66,    70,    78,    83,    92,
-     101,   109,   115,   124,   125,   131,   140,   141,   147,   156,
-     157,   158,   159,   160,   164,   165,   169,   176
+       0,    36,    36,    36,    44,    45,    49,    50,    54,    55,
+      59,    60,    64,    65,    66,    67,    71,    79,    84,    93,
+     102,   110,   116,   125,   126,   132,   141,   142,   148,   157,
+     158,   159,   160,   161,   165,   166,   170,   177
 };
 #endif
 
@@ -1163,285 +1164,285 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* $@1: %empty  */
-#line 35 "guishap.y"
+#line 36 "guishap.y"
     { 
         root = create_node(NODE_PROGRAM, "Program");
         current_block = root;
     }
-#line 1172 "guishap.tab.c"
+#line 1173 "guishap.tab.c"
     break;
 
   case 3: /* program: $@1 stmt_list  */
-#line 39 "guishap.y"
+#line 40 "guishap.y"
               { root->children = (yyvsp[0].node); }
-#line 1178 "guishap.tab.c"
+#line 1179 "guishap.tab.c"
     break;
 
   case 4: /* stmt_list: stmt  */
-#line 43 "guishap.y"
+#line 44 "guishap.y"
          { (yyval.node) = (yyvsp[0].node); }
-#line 1184 "guishap.tab.c"
+#line 1185 "guishap.tab.c"
     break;
 
   case 5: /* stmt_list: stmt_list stmt  */
-#line 44 "guishap.y"
+#line 45 "guishap.y"
                      { (yyvsp[-1].node)->next = (yyvsp[0].node); (yyval.node) = (yyvsp[-1].node); }
-#line 1190 "guishap.tab.c"
+#line 1191 "guishap.tab.c"
     break;
 
   case 6: /* stmt: simple_stmt  */
-#line 48 "guishap.y"
+#line 49 "guishap.y"
                 { (yyval.node) = (yyvsp[0].node); }
-#line 1196 "guishap.tab.c"
+#line 1197 "guishap.tab.c"
     break;
 
   case 7: /* stmt: compound_stmt  */
-#line 49 "guishap.y"
+#line 50 "guishap.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 1202 "guishap.tab.c"
+#line 1203 "guishap.tab.c"
     break;
 
   case 8: /* simple_stmt: expr_stmt NEWLINE  */
-#line 53 "guishap.y"
+#line 54 "guishap.y"
                       { (yyval.node) = (yyvsp[-1].node); }
-#line 1208 "guishap.tab.c"
+#line 1209 "guishap.tab.c"
     break;
 
   case 9: /* simple_stmt: return_stmt NEWLINE  */
-#line 54 "guishap.y"
+#line 55 "guishap.y"
                           { (yyval.node) = (yyvsp[-1].node); }
-#line 1214 "guishap.tab.c"
+#line 1215 "guishap.tab.c"
     break;
 
   case 10: /* expr_stmt: assignment  */
-#line 58 "guishap.y"
+#line 59 "guishap.y"
                { (yyval.node) = (yyvsp[0].node); }
-#line 1220 "guishap.tab.c"
+#line 1221 "guishap.tab.c"
     break;
 
   case 11: /* expr_stmt: expression  */
-#line 59 "guishap.y"
+#line 60 "guishap.y"
                  { (yyval.node) = (yyvsp[0].node); }
-#line 1226 "guishap.tab.c"
+#line 1227 "guishap.tab.c"
     break;
 
   case 12: /* compound_stmt: if_stmt  */
-#line 63 "guishap.y"
+#line 64 "guishap.y"
             { (yyval.node) = (yyvsp[0].node); }
-#line 1232 "guishap.tab.c"
+#line 1233 "guishap.tab.c"
     break;
 
   case 13: /* compound_stmt: for_stmt  */
-#line 64 "guishap.y"
+#line 65 "guishap.y"
                { (yyval.node) = (yyvsp[0].node); }
-#line 1238 "guishap.tab.c"
+#line 1239 "guishap.tab.c"
     break;
 
   case 14: /* compound_stmt: funcdef  */
-#line 65 "guishap.y"
+#line 66 "guishap.y"
               { (yyval.node) = (yyvsp[0].node); }
-#line 1244 "guishap.tab.c"
+#line 1245 "guishap.tab.c"
     break;
 
   case 15: /* compound_stmt: classdef  */
-#line 66 "guishap.y"
+#line 67 "guishap.y"
                { (yyval.node) = (yyvsp[0].node); }
-#line 1250 "guishap.tab.c"
+#line 1251 "guishap.tab.c"
     break;
 
   case 16: /* assignment: identifier ASSIGN expression  */
-#line 70 "guishap.y"
+#line 71 "guishap.y"
                                  {
         (yyval.node) = create_node(NODE_ASSIGNMENT, "=");
         append_child((yyval.node), (yyvsp[-2].node));
         append_child((yyval.node), (yyvsp[0].node));
     }
-#line 1260 "guishap.tab.c"
+#line 1261 "guishap.tab.c"
     break;
 
   case 17: /* if_stmt: IF test COLON NEWLINE INDENT stmt DEDENT  */
-#line 78 "guishap.y"
+#line 79 "guishap.y"
                                              {
         (yyval.node) = create_node(NODE_IF, "if");
         append_child((yyval.node), (yyvsp[-5].node));  // FIXED $3 to $2 (test node)
         append_child((yyval.node), (yyvsp[-1].node));  // stmt node
     }
-#line 1270 "guishap.tab.c"
+#line 1271 "guishap.tab.c"
     break;
 
   case 18: /* if_stmt: IF test COLON NEWLINE INDENT stmt DEDENT ELSE COLON NEWLINE INDENT stmt DEDENT  */
-#line 83 "guishap.y"
+#line 84 "guishap.y"
                                                                                      {
         (yyval.node) = create_node(NODE_IF, "if-else");
         append_child((yyval.node), (yyvsp[-11].node));  // test node
         append_child((yyval.node), (yyvsp[-7].node));  // then branch
         append_child((yyval.node), (yyvsp[-1].node)); // else branch
     }
-#line 1281 "guishap.tab.c"
+#line 1282 "guishap.tab.c"
     break;
 
   case 19: /* for_stmt: FOR identifier IN expression COLON NEWLINE INDENT stmt DEDENT  */
-#line 92 "guishap.y"
+#line 93 "guishap.y"
                                                                   {
         (yyval.node) = create_node(NODE_FOR, "for");
         append_child((yyval.node), (yyvsp[-7].node));
         append_child((yyval.node), (yyvsp[-5].node));
         append_child((yyval.node), (yyvsp[-1].node));
     }
-#line 1292 "guishap.tab.c"
+#line 1293 "guishap.tab.c"
     break;
 
   case 20: /* funcdef: DEF identifier LPAREN RPAREN COLON NEWLINE INDENT stmt DEDENT  */
-#line 101 "guishap.y"
+#line 102 "guishap.y"
                                                                   {
         (yyval.node) = create_node(NODE_FUNCTION, "func");
         append_child((yyval.node), (yyvsp[-7].node));
         append_child((yyval.node), (yyvsp[-1].node));
     }
-#line 1302 "guishap.tab.c"
+#line 1303 "guishap.tab.c"
     break;
 
   case 21: /* test: expression EQ expression  */
-#line 109 "guishap.y"
+#line 110 "guishap.y"
                              {
         ASTNode *op = create_node(NODE_BINOP, "==");
         append_child(op, (yyvsp[-2].node));
         append_child(op, (yyvsp[0].node));
         (yyval.node) = op;
     }
-#line 1313 "guishap.tab.c"
+#line 1314 "guishap.tab.c"
     break;
 
   case 22: /* test: expression NE expression  */
-#line 115 "guishap.y"
+#line 116 "guishap.y"
                                {
         ASTNode *op = create_node(NODE_BINOP, "!=");
         append_child(op, (yyvsp[-2].node));
         append_child(op, (yyvsp[0].node));
         (yyval.node) = op;
     }
-#line 1324 "guishap.tab.c"
+#line 1325 "guishap.tab.c"
     break;
 
   case 23: /* expression: term  */
-#line 124 "guishap.y"
+#line 125 "guishap.y"
          { (yyval.node) = (yyvsp[0].node); }
-#line 1330 "guishap.tab.c"
+#line 1331 "guishap.tab.c"
     break;
 
   case 24: /* expression: expression ADD term  */
-#line 125 "guishap.y"
+#line 126 "guishap.y"
                           {
         ASTNode *op = create_node(NODE_BINOP, "+");
         append_child(op, (yyvsp[-2].node));
         append_child(op, (yyvsp[0].node));
         (yyval.node) = op;
     }
-#line 1341 "guishap.tab.c"
+#line 1342 "guishap.tab.c"
     break;
 
   case 25: /* expression: expression SUB term  */
-#line 131 "guishap.y"
+#line 132 "guishap.y"
                           {
         ASTNode *op = create_node(NODE_BINOP, "-");
         append_child(op, (yyvsp[-2].node));
         append_child(op, (yyvsp[0].node));
         (yyval.node) = op;
     }
-#line 1352 "guishap.tab.c"
+#line 1353 "guishap.tab.c"
     break;
 
   case 26: /* term: factor  */
-#line 140 "guishap.y"
+#line 141 "guishap.y"
            { (yyval.node) = (yyvsp[0].node); }
-#line 1358 "guishap.tab.c"
+#line 1359 "guishap.tab.c"
     break;
 
   case 27: /* term: term MUL factor  */
-#line 141 "guishap.y"
+#line 142 "guishap.y"
                       {
         ASTNode *op = create_node(NODE_BINOP, "*");
         append_child(op, (yyvsp[-2].node));
         append_child(op, (yyvsp[0].node));
         (yyval.node) = op;
     }
-#line 1369 "guishap.tab.c"
+#line 1370 "guishap.tab.c"
     break;
 
   case 28: /* term: term DIV factor  */
-#line 147 "guishap.y"
+#line 148 "guishap.y"
                       {
         ASTNode *op = create_node(NODE_BINOP, "/");
         append_child(op, (yyvsp[-2].node));
         append_child(op, (yyvsp[0].node));
         (yyval.node) = op;
     }
-#line 1380 "guishap.tab.c"
+#line 1381 "guishap.tab.c"
     break;
 
   case 29: /* factor: NUMBER  */
-#line 156 "guishap.y"
+#line 157 "guishap.y"
            { (yyval.node) = create_node(NODE_LITERAL, (yyvsp[0].str)); }
-#line 1386 "guishap.tab.c"
+#line 1387 "guishap.tab.c"
     break;
 
   case 30: /* factor: BN_NUMBER  */
-#line 157 "guishap.y"
+#line 158 "guishap.y"
                 { (yyval.node) = create_node(NODE_LITERAL, (yyvsp[0].str)); }
-#line 1392 "guishap.tab.c"
+#line 1393 "guishap.tab.c"
     break;
 
   case 31: /* factor: STRING  */
-#line 158 "guishap.y"
+#line 159 "guishap.y"
              { (yyval.node) = create_node(NODE_LITERAL, (yyvsp[0].str)); }
-#line 1398 "guishap.tab.c"
+#line 1399 "guishap.tab.c"
     break;
 
   case 32: /* factor: identifier  */
-#line 159 "guishap.y"
+#line 160 "guishap.y"
                  { (yyval.node) = (yyvsp[0].node); }
-#line 1404 "guishap.tab.c"
+#line 1405 "guishap.tab.c"
     break;
 
   case 33: /* factor: LPAREN expression RPAREN  */
-#line 160 "guishap.y"
+#line 161 "guishap.y"
                                { (yyval.node) = (yyvsp[-1].node); }
-#line 1410 "guishap.tab.c"
+#line 1411 "guishap.tab.c"
     break;
 
   case 34: /* identifier: EN_IDENTIFIER  */
-#line 164 "guishap.y"
+#line 165 "guishap.y"
                   { (yyval.node) = create_node(NODE_IDENTIFIER, (yyvsp[0].str)); }
-#line 1416 "guishap.tab.c"
+#line 1417 "guishap.tab.c"
     break;
 
   case 35: /* identifier: BN_IDENTIFIER  */
-#line 165 "guishap.y"
+#line 166 "guishap.y"
                     { (yyval.node) = create_node(NODE_IDENTIFIER, (yyvsp[0].str)); }
-#line 1422 "guishap.tab.c"
+#line 1423 "guishap.tab.c"
     break;
 
   case 36: /* return_stmt: RETURN expression  */
-#line 169 "guishap.y"
+#line 170 "guishap.y"
                       {
         (yyval.node) = create_node(NODE_RETURN, "return");
         append_child((yyval.node), (yyvsp[0].node));
     }
-#line 1431 "guishap.tab.c"
+#line 1432 "guishap.tab.c"
     break;
 
   case 37: /* classdef: CLASS identifier COLON NEWLINE INDENT stmt DEDENT  */
-#line 176 "guishap.y"
+#line 177 "guishap.y"
                                                       {
         (yyval.node) = create_node(NODE_CLASS, "class");
         append_child((yyval.node), (yyvsp[-5].node));
         append_child((yyval.node), (yyvsp[-1].node));
     }
-#line 1441 "guishap.tab.c"
+#line 1442 "guishap.tab.c"
     break;
 
 
-#line 1445 "guishap.tab.c"
+#line 1446 "guishap.tab.c"
 
       default: break;
     }
@@ -1634,7 +1635,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 183 "guishap.y"
+#line 184 "guishap.y"
 
 
 // Implement AST functions
@@ -1688,9 +1689,12 @@ void yyerror(const char *s) {
 }
 
 int main() {
-    yyparse();
-    printf("\nGenerated AST:\n");
-    print_ast(root, 0);
+    if (yyparse() == 0 && root != NULL) {
+        fprintf(stderr, "\nGenerated AST:\n");
+        print_ast(root, 0);
+
+        gen_wasm(root, stdout); // <-- clean wat output to stdout
+    }
     free_ast(root);
     return 0;
 }
