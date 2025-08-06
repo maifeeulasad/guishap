@@ -80,7 +80,7 @@ void gen_wasm(ASTNode *node, FILE *out) {
 
         case NODE_ASSIGNMENT:
             fprintf(out, "    ;; Assignment\n");
-            gen_wasm(node->children->next, out); // value
+            gen_wasm(node->children->next, out); // value, process in NODE_LITERAL
             fprintf(out, "    global.set $%s\n", node->children->value);
             break;
 
@@ -97,7 +97,13 @@ void gen_wasm(ASTNode *node, FILE *out) {
         }
 
         case NODE_LITERAL:
-            fprintf(out, "    i32.const %s\n", normalize_bn_number(node->value));
+            if (node->value[0] == '"' && node->value[strlen(node->value)-1] == '"') {
+                // TODO: proper string handling with memory
+                fprintf(out, "    i32.const %lu  ;; String length of %s\n", 
+                        strlen(node->value) - 2, node->value);
+            } else {
+                fprintf(out, "    i32.const %s\n", normalize_bn_number(node->value));
+            }
             break;
 
         case NODE_IDENTIFIER:
