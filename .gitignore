@@ -1,1 +1,4 @@
-guishap.out
+*.out
+*.wasm
+*.wat
+test/*.mgs
