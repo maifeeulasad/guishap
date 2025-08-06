@@ -212,8 +212,8 @@ void free_ast(ASTNode *node) {
 
 void print_ast(ASTNode *node, int depth) {
     if (!node) return;
-    for (int i = 0; i < depth; i++) printf("  ");
-    printf("%s: %s\n", 
+    for (int i = 0; i < depth; i++) fprintf(stderr, "  ");
+    fprintf(stderr, "%s: %s\n", 
         (node->type == NODE_PROGRAM) ? "Program" :
         (node->type == NODE_ASSIGNMENT) ? "Assignment" :
         (node->type == NODE_IDENTIFIER) ? "Identifier" :
