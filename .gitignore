@@ -2,3 +2,4 @@
 *.wasm
 *.wat
 *.mgs
+*.log
