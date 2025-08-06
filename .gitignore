@@ -1,4 +1,4 @@
 *.out
 *.wasm
 *.wat
-test/*.mgs
+*.mgs
