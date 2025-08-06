@@ -24,7 +24,7 @@ guishap.tab.c: guishap.y
 wasm: guishap.wasm
 
 test-wasm: guishap.out
-	@printf "x = 5\ny = 3\n" | ./guishap.out 2>/dev/null > example.wat
+	@printf "x = ৫\ny = ৩\n" | ./guishap.out 2>/dev/null > example.wat
 	@echo "Generated example.wat:"
 	@cat example.wat
 	@echo ""
