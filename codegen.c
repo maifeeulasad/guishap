@@ -36,23 +36,23 @@ void collect_globals(ASTNode *node) {
 
 char *normalize_bn_number(const char *bn) {
     static char result[64];
-    int i = 0;
-    for (; *bn && i < 63; bn++, i++) {
-        switch (*bn) {
-            case '০': result[i] = '0'; break;
-            case '১': result[i] = '1'; break;
-            case '২': result[i] = '2'; break;
-            case '৩': result[i] = '3'; break;
-            case '৪': result[i] = '4'; break;
-            case '৫': result[i] = '5'; break;
-            case '৬': result[i] = '6'; break;
-            case '৭': result[i] = '7'; break;
-            case '৮': result[i] = '8'; break;
-            case '৯': result[i] = '9'; break;
-            default:  result[i] = *bn; break;
-        }
+    int result_idx = 0;
+    
+    while (*bn && result_idx < 63) {
+        // Check for Bengali digits (UTF-8 encoded)
+        if (strncmp(bn, "০", 3) == 0) { result[result_idx++] = '0'; bn += 3; }
+        else if (strncmp(bn, "১", 3) == 0) { result[result_idx++] = '1'; bn += 3; }
+        else if (strncmp(bn, "২", 3) == 0) { result[result_idx++] = '2'; bn += 3; }
+        else if (strncmp(bn, "৩", 3) == 0) { result[result_idx++] = '3'; bn += 3; }
+        else if (strncmp(bn, "৪", 3) == 0) { result[result_idx++] = '4'; bn += 3; }
+        else if (strncmp(bn, "৫", 3) == 0) { result[result_idx++] = '5'; bn += 3; }
+        else if (strncmp(bn, "৬", 3) == 0) { result[result_idx++] = '6'; bn += 3; }
+        else if (strncmp(bn, "৭", 3) == 0) { result[result_idx++] = '7'; bn += 3; }
+        else if (strncmp(bn, "৮", 3) == 0) { result[result_idx++] = '8'; bn += 3; }
+        else if (strncmp(bn, "৯", 3) == 0) { result[result_idx++] = '9'; bn += 3; }
+        else { result[result_idx++] = *bn; bn++; }
     }
-    result[i] = '\0';
+    result[result_idx] = '\0';
     return result;
 }
 
