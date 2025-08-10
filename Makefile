@@ -23,28 +23,11 @@ guishap.tab.c: guishap.y
 
 wasm: guishap.wasm
 
-test-wasm: guishap.out
-	@printf "x = ৫\ny = ৩\n" | ./guishap.out 2>/dev/null > example.wat
-	@echo "Generated example.wat:"
-	@cat example.wat
-	@echo ""
-	@if command -v wat2wasm >/dev/null 2>&1; then \
-		wat2wasm example.wat -o example.wasm && echo "Successfully created example.wasm"; \
-	else \
-		echo "wat2wasm not found - install wabt toolkit to generate .wasm files"; \
-	fi
-
 test: guishap.out
-	@echo "Testing with simple assignment:"
-	@printf "x = 5\n" | ./guishap.out
-	@echo "\nTesting with Bengali numbers:"
-	@printf "x = ৫\n" | ./guishap.out
-	@echo "\nTesting with test files:"
-	@for file in test/*.mgs; do \
-		echo "Testing $$file:"; \
-		./guishap.out < "$$file" 2>&1 || echo "Failed to parse $$file"; \
-		echo ""; \
-	done
-
+	@echo "🧪 Running comprehensive test suite..."
+	@./run_tests.sh
+	@echo "✅ All tests passed!"
+	
 clean:
 	rm -f lex.yy.c guishap.tab.* guishap.out *.wasm *.wat
+	rm -f tests/*/actual_output.wat tests/*/output.wasm
