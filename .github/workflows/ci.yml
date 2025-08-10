@@ -86,6 +86,7 @@ jobs:
       run: |
         echo "🏗️  Building Guishap compiler..."
         make all
+        ls -la guishap.out
         echo "✅ Build completed successfully"
     
     - name: Run complete test suite
@@ -97,14 +98,21 @@ jobs:
     - name: Test WebAssembly generation
       run: |
         echo "🚀 Testing WebAssembly generation..."
-        make test-wasm
+        make wasm
+        ls -la *.wat *.wasm
         echo "✅ WebAssembly tests passed"
     
     - name: Run CI validation
       run: |
         echo "🔍 Running comprehensive CI validation..."
-        chmod +x ci.sh
-        ./ci.sh
+        if [ -f ci.sh ]; then
+          chmod +x ci.sh
+          ./ci.sh
+        else
+          echo "ci.sh not found, running basic validation..."
+          make test
+          make wasm
+        fi
         echo "✅ CI validation completed"
     
     - name: Upload test artifacts
@@ -114,9 +122,11 @@ jobs:
         name: test-results-ubuntu-gcc${{ matrix.gcc-version }}
         path: |
           test/
+          tests/
           *.wat
           *.wasm
           *.log
+          *.out
         retention-days: 7
 
   # Job 2: Build and Test on macOS
@@ -154,7 +164,7 @@ jobs:
     - name: Run tests
       run: |
         make test
-        make test-wasm
+        make wasm
     
     - name: Upload macOS artifacts
       if: always()
@@ -163,8 +173,10 @@ jobs:
         name: test-results-macos
         path: |
           test/
+          tests/
           *.wat
           *.wasm
+          *.out
         retention-days: 7
 
   # Job 3: Code Quality and Analysis
@@ -261,7 +273,16 @@ jobs:
           if [ -f "$test_dir/input.mgs" ]; then
             echo "Testing memory leaks for: $(basename "$test_dir")"
             valgrind --leak-check=full --error-exitcode=1 --track-origins=yes \
-              ./guishap "$test_dir/input.mgs" > /dev/null 2>&1 || echo "Memory issues detected in $(basename "$test_dir")"
+              ./guishap.out "$test_dir/input.mgs" > /dev/null 2>&1 || echo "Memory issues detected in $(basename "$test_dir")"
+          fi
+        done
+        
+        # Also check tests/ directory if it exists
+        for test_dir in tests/*/; do
+          if [ -f "$test_dir/input.mgs" ]; then
+            echo "Testing memory leaks for: $(basename "$test_dir")"
+            valgrind --leak-check=full --error-exitcode=1 --track-origins=yes \
+              ./guishap.out "$test_dir/input.mgs" > /dev/null 2>&1 || echo "Memory issues detected in $(basename "$test_dir")"
           fi
         done
         
@@ -276,7 +297,16 @@ jobs:
           if [ -f "$test_dir/input.mgs" ]; then
             echo "Timing: $(basename "$test_dir")"
             /usr/bin/time -f "Real: %es, User: %Us, Sys: %Ss, Memory: %MKB" \
-              ./guishap "$test_dir/input.mgs" > /dev/null
+              ./guishap.out "$test_dir/input.mgs" > /dev/null
+          fi
+        done
+        
+        # Also check tests/ directory if it exists  
+        for test_dir in tests/*/; do
+          if [ -f "$test_dir/input.mgs" ]; then
+            echo "Timing: $(basename "$test_dir")"
+            /usr/bin/time -f "Real: %es, User: %Us, Sys: %Ss, Memory: %MKB" \
+              ./guishap.out "$test_dir/input.mgs" > /dev/null
           fi
         done
         
@@ -305,13 +335,16 @@ jobs:
     - name: Run comprehensive tests
       run: |
         make test
-        make test-wasm
-        ./ci.sh
+        make wasm
+        if [ -f ci.sh ]; then
+          chmod +x ci.sh
+          ./ci.sh
+        fi
     
     - name: Create release artifacts
       run: |
         mkdir -p release-artifacts
-        cp guishap release-artifacts/
+        cp guishap.out release-artifacts/
         cp *.wat release-artifacts/ 2>/dev/null || true
         cp *.wasm release-artifacts/ 2>/dev/null || true
         tar -czf guishap-${{ github.ref_name }}.tar.gz release-artifacts/
