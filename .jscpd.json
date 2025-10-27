@@ -1,0 +1,12 @@
+{
+  "ignore": [
+    "guishap.tab.c",
+    "guishap.tab.h",
+    "lex.yy.c",
+    "**/*.out",
+    "**/*.o",
+    "**/*.wasm",
+    "**/*.wat"
+  ]
+}
+
