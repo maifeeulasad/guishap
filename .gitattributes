@@ -1,0 +1,7 @@
+# Generated files - exclude from diffs and language stats
+*.tab.c linguist-generated=true
+*.tab.h linguist-generated=true
+lex.yy.c linguist-generated=true
+
+# Mark as binary to reduce noise in diffs
+*.wasm binary
