@@ -1,5 +1,6 @@
 *.out
 *.wasm
-*.wat
-*.mgs
+guishap.wat
+tests/*/actual_output.wat
+tests/*/output.wasm
 *.log
