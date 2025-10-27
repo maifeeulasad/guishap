@@ -11,7 +11,7 @@ int stack_ptr = 0;
 int paren_count = 0;
 %}
 
-%option noinput nounput nodefault yylineno
+%option noinput nounput yylineno
 %option noyywrap
 
 BN_DIGIT          [০১২৩৪৫৬৭৮৯]
