@@ -4,7 +4,6 @@
     ;; Assignment
     i32.const 5
     i32.const 3
-    i32.const 3
     i32.add
     global.set $result
     i32.const 0

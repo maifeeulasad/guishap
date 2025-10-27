@@ -56,7 +56,15 @@ char *normalize_bn_number(const char *bn) {
     return result;
 }
 
+void gen_wasm_node_only(ASTNode *node, FILE *out);
+
 void gen_wasm(ASTNode *node, FILE *out) {
+    if (!node) return;
+    gen_wasm_node_only(node, out);
+    gen_wasm(node->next, out); // Process siblings
+}
+
+void gen_wasm_node_only(ASTNode *node, FILE *out) {
     if (!node) return;
 
     switch(node->type) {
@@ -80,14 +88,14 @@ void gen_wasm(ASTNode *node, FILE *out) {
 
         case NODE_ASSIGNMENT:
             fprintf(out, "    ;; Assignment\n");
-            gen_wasm(node->children->next, out); // value, process in NODE_LITERAL
+            gen_wasm_node_only(node->children->next, out); // value, process node only without siblings
             fprintf(out, "    global.set $%s\n", node->children->value);
             break;
 
         case NODE_BINOP: {
             const char *op = node->value;
-            gen_wasm(node->children, out);
-            gen_wasm(node->children->next, out);
+            gen_wasm_node_only(node->children, out);
+            gen_wasm_node_only(node->children->next, out);
             fprintf(out, "    i32.%s\n", 
                 strcmp(op, "+") == 0 ? "add" :
                 strcmp(op, "-") == 0 ? "sub" :
@@ -119,6 +127,4 @@ void gen_wasm(ASTNode *node, FILE *out) {
         default:
             break;
     }
-
-    gen_wasm(node->next, out);
 }

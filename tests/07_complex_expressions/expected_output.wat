@@ -8,9 +8,7 @@
     ;; Assignment
     global.get $a
     global.get $b
-    global.get $b
     i32.mul
-    i32.const 3
     i32.const 3
     i32.add
     global.set $result
