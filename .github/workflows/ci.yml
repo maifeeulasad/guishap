@@ -244,6 +244,8 @@ jobs:
         VALIDATE_CPP: true
         VALIDATE_MARKDOWN: true
         VALIDATE_YAML: true
+        FILTER_REGEX_EXCLUDE: '.*\.(tab\.c|tab\.h|yy\.c)$'
+        LOG_LEVEL: DEBUG
 
   # Job 5: Performance and Memory Tests
   performance-test:
