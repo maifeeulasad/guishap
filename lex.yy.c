@@ -1074,7 +1074,7 @@ YY_RULE_SETUP
 case 33:
 YY_RULE_SETUP
 #line 90 "guishap.l"
-YY_FATAL_ERROR( "flex scanner jammed" );
+ECHO;
 	YY_BREAK
 #line 1080 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
