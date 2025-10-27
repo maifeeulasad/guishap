@@ -1,0 +1,8 @@
+// Suppress warnings for generated files
+*:guishap.tab.c
+*:guishap.tab.h
+*:lex.yy.c
+
+// Suppress specific warnings
+missingIncludeSystem
+unusedFunction
