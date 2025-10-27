@@ -42,7 +42,12 @@ program:
 
 stmt_list:
     stmt { $$ = $1; }
-    | stmt_list stmt { $1->next = $2; $$ = $1; }
+    | stmt_list stmt { 
+        ASTNode *last = $1;
+        while (last->next) last = last->next;
+        last->next = $2;
+        $$ = $1;
+    }
     ;
 
 stmt:
