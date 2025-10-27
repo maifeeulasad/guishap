@@ -51,7 +51,8 @@
 | | WebAssembly Binary | `.wasm` output | - | ✅ **DONE** | Binary WebAssembly |
 | | Global Variables | `global $var` | - | ✅ **DONE** | Automatic global detection |
 
-### Status Legend:
+### Status Legend
+
 - ✅ **DONE**: Fully implemented and tested
 - ⚠️ **PARTIAL**: Basic implementation exists, needs enhancement
 - ❌ **TODO**: Not yet implemented
@@ -143,7 +144,7 @@ wat2wasm myprogram.wat -o myprogram.wasm
 
 **Medium Priority:**
 - While loops (`যেহেতু`)
-- Class definitions (`শ্রেণী`) 
+- Class definitions (`শ্রেণী`)
 - Comparison operators in expressions
 - Better error messages in Bengali
 
