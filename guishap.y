@@ -25,7 +25,7 @@ ASTNode *current_block = NULL;
 %token <str> NUMBER BN_NUMBER STRING EN_IDENTIFIER BN_IDENTIFIER KEYWORD_TYPE
 
 %type <node> program stmt stmt_list simple_stmt expr_stmt compound_stmt
-%type <node> assignment if_stmt for_stmt funcdef classdef test expression term factor identifier
+%type <node> assignment if_stmt for_stmt funcdef classdef test comparison expression term factor identifier
 %type <node> return_stmt  // ADDED MISSING TYPE DECLARATION
 
 %start program
@@ -73,7 +73,7 @@ compound_stmt:
     ;
 
 assignment:
-    identifier ASSIGN expression {
+    identifier ASSIGN comparison {
         $$ = create_node(NODE_ASSIGNMENT, "=");
         append_child($$, $1);
         append_child($$, $3);
@@ -119,6 +119,22 @@ test:
         $$ = op;
     }
     | expression NE expression {
+        ASTNode *op = create_node(NODE_BINOP, "!=");
+        append_child(op, $1);
+        append_child(op, $3);
+        $$ = op;
+    }
+    ;
+
+comparison:
+    expression { $$ = $1; }
+    | comparison EQ expression {
+        ASTNode *op = create_node(NODE_BINOP, "==");
+        append_child(op, $1);
+        append_child(op, $3);
+        $$ = op;
+    }
+    | comparison NE expression {
         ASTNode *op = create_node(NODE_BINOP, "!=");
         append_child(op, $1);
         append_child(op, $3);
