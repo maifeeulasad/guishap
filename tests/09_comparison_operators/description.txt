@@ -1,0 +1,1 @@
+Comparison operators test (equality and inequality with literals and variables)

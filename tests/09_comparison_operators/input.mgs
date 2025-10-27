@@ -1,0 +1,4 @@
+x = 5
+y = 10
+eq_result = x == x
+ne_result = x != y
