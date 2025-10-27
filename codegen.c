@@ -37,7 +37,7 @@ void collect_globals(ASTNode *node) {
 char *normalize_bn_number(const char *bn) {
     static char result[64];
     int result_idx = 0;
-    
+
     while (*bn && result_idx < 63) {
         // Check for Bengali digits (UTF-8 encoded)
         if (strncmp(bn, "০", 3) == 0) { result[result_idx++] = '0'; bn += 3; }
@@ -96,7 +96,7 @@ void gen_wasm_node_only(ASTNode *node, FILE *out) {
             const char *op = node->value;
             gen_wasm_node_only(node->children, out);
             gen_wasm_node_only(node->children->next, out);
-            fprintf(out, "    i32.%s\n", 
+            fprintf(out, "    i32.%s\n",
                 strcmp(op, "+") == 0 ? "add" :
                 strcmp(op, "-") == 0 ? "sub" :
                 strcmp(op, "*") == 0 ? "mul" :
@@ -108,8 +108,8 @@ void gen_wasm_node_only(ASTNode *node, FILE *out) {
 
         case NODE_LITERAL:
             if (node->value[0] == '"' && node->value[strlen(node->value)-1] == '"') {
-                // TODO: proper string handling with memory
-                fprintf(out, "    i32.const %lu  ;; String length of %s\n", 
+                // TODO(guishap): Implement proper string handling with memory
+                fprintf(out, "    i32.const %lu  ;; String length of %s\n",
                         strlen(node->value) - 2, node->value);
             } else {
                 fprintf(out, "    i32.const %s\n", normalize_bn_number(node->value));
