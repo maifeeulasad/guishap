@@ -184,7 +184,7 @@ classdef:
 %%
 
 // Implement AST functions
-ASTNode* create_node(NodeType type, char *value) {
+ASTNode* create_node(NodeType type, const char *value) {
     ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
     node->type = type;
     node->value = strdup(value);
