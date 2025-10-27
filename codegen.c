@@ -100,7 +100,9 @@ void gen_wasm_node_only(ASTNode *node, FILE *out) {
                 strcmp(op, "+") == 0 ? "add" :
                 strcmp(op, "-") == 0 ? "sub" :
                 strcmp(op, "*") == 0 ? "mul" :
-                strcmp(op, "/") == 0 ? "div_s" : "add");
+                strcmp(op, "/") == 0 ? "div_s" :
+                strcmp(op, "==") == 0 ? "eq" :
+                strcmp(op, "!=") == 0 ? "ne" : "add");
             break;
         }
 
